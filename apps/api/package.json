@@ -1,0 +1,27 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx main.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.0.1",
+    "express-zod-api": "^21.11.1",
+    "http-errors": "^2.0.0",
+    "typescript": "^5.7.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5",
+    "@types/http-errors": "^2.0.4",
+    "@types/node": "^22.10.7",
+    "tsx": "^4.19.2"
+  }
+}
