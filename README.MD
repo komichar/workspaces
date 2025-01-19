@@ -12,3 +12,7 @@ NICE TO HAVE
 - [ ] presentation
 - [ ] excalidraw
 - [ ] system design high level
+
+NOTES
+
+- Fixing Broken Drizzle Foreign Key Migrations In SQLite - https://www.youtube.com/watch?v=qTp3VA-9DYc

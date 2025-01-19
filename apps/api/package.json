@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "studio": "drizzle-kit studio",
     "docs:gen": "tsx generate-documentation.ts",
-    "dev": "tsx main.ts"
+    "dev": "tsx watch main.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `office_id` integer REFERENCES offices(id);

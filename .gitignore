@@ -1,5 +1,7 @@
 node_modules
 
+launch.json
+
 .env
 
-apps/api/local.db
+**/*.db

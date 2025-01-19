@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1737311639629,
+      "tag": "0000_daffy_clea",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1737311659194,
+      "tag": "0001_first_cassandra_nova",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1737311692703,
+      "tag": "0002_brown_black_panther",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1737311700067,
+      "tag": "0003_wise_mariko_yashida",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1737311843465,
+      "tag": "0004_married_smasher",
+      "breakpoints": true
+    }
+  ]
+}
