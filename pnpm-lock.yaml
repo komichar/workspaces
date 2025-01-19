@@ -23,6 +23,9 @@ importers:
       drizzle-orm:
         specifier: ^0.38.4
         version: 0.38.4(@libsql/client@0.14.0)
+      drizzle-zod:
+        specifier: ^0.6.1
+        version: 0.6.1(drizzle-orm@0.38.4(@libsql/client@0.14.0))(zod@3.24.1)
       express:
         specifier: ^5.0.1
         version: 5.0.1
@@ -808,6 +811,12 @@ packages:
       sqlite3:
         optional: true
 
+  drizzle-zod@0.6.1:
+    resolution: {integrity: sha512-huEbUgnsuR8tupnmLiyB2F1I2H9dswI3GfM36IbIqx9i0YUeYjRsDpJVyFVeziUvI1ogT9JHRL2Q03cC4QmvxA==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.0'
+      zod: '>=3.0.0'
+
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
@@ -976,7 +985,6 @@ packages:
 
   libsql@0.4.7:
     resolution: {integrity: sha512-T9eIRCs6b0J1SHKYIvD8+KCJMcWZ900iZyxdnSCdqxN12Z1ijzT+jY5nrk72Jw4B0HGzms2NgpryArlJqvc3Lw==}
-    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   math-intrinsics@1.1.0:
@@ -1657,6 +1665,11 @@ snapshots:
   drizzle-orm@0.38.4(@libsql/client@0.14.0):
     optionalDependencies:
       '@libsql/client': 0.14.0
+
+  drizzle-zod@0.6.1(drizzle-orm@0.38.4(@libsql/client@0.14.0))(zod@3.24.1):
+    dependencies:
+      drizzle-orm: 0.38.4(@libsql/client@0.14.0)
+      zod: 3.24.1
 
   dunder-proto@1.0.1:
     dependencies:
