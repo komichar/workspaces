@@ -5,3 +5,5 @@ import { users } from "./schema";
 export const userSelectSchema = createSelectSchema(users);
 
 export type User = z.infer<typeof userSelectSchema>;
+
+export type NewUser = typeof users.$inferInsert;
