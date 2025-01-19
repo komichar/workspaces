@@ -60,6 +60,198 @@ paths:
                     status: error
                     error:
                       message: Sample error message
+  /v1/auth/login:
+    post:
+      operationId: PostV1AuthLogin
+      requestBody:
+        description: POST /v1/auth/login Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+      responses:
+        "200":
+          description: POST /v1/auth/login Positive response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: success
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            format: int64
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          office_id:
+                            type:
+                              - integer
+                              - "null"
+                            format: int64
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          name:
+                            type: string
+                          admin:
+                            type:
+                              - boolean
+                              - "null"
+                          email:
+                            type: string
+                        required:
+                          - id
+                          - office_id
+                          - name
+                          - admin
+                          - email
+                      token:
+                        type: string
+                    required:
+                      - user
+                      - token
+                required:
+                  - status
+                  - data
+        "400":
+          description: POST /v1/auth/login Negative response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
+  /v1/auth/register:
+    post:
+      operationId: PostV1AuthRegister
+      requestBody:
+        description: POST /v1/auth/register Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 3
+                  maxLength: 255
+                email:
+                  type: string
+                  format: email
+                office_id:
+                  type: number
+                  format: double
+                  exclusiveMinimum: 0
+                  maximum: 1.7976931348623157e+308
+              required:
+                - name
+                - email
+                - office_id
+      responses:
+        "200":
+          description: POST /v1/auth/register Positive response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: success
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            format: int64
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          office_id:
+                            type:
+                              - integer
+                              - "null"
+                            format: int64
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          name:
+                            type: string
+                          admin:
+                            type:
+                              - boolean
+                              - "null"
+                          email:
+                            type: string
+                        required:
+                          - id
+                          - office_id
+                          - name
+                          - admin
+                          - email
+                    required:
+                      - user
+                required:
+                  - status
+                  - data
+        "400":
+          description: POST /v1/auth/register Negative response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
 components:
   schemas: {}
   responses: {}
