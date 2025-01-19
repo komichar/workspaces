@@ -22,7 +22,8 @@ export const reservations = sqliteTable("reservations", {
   office_id: int("office_id")
     .notNull()
     .references(() => offices.id),
-  desk_id: int("desk_id").notNull(),
+  seat_number: int("seat_number").notNull(),
+  date: text("date").notNull(), // SQLite stores TIMESTAMP as TEXT
   start_time: text("start_time").notNull(), // SQLite stores TIMESTAMP as TEXT
   end_time: text("end_time").notNull(),
   status: text("status").notNull().default("active"), // Use TEXT for ENUM-like behavior
