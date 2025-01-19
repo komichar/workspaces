@@ -1,9 +1,9 @@
+import { eq } from "drizzle-orm";
 import { defaultEndpointsFactory, Routing } from "express-zod-api";
+import createHttpError from "http-errors";
 import { z } from "zod";
 import { db } from "./database";
 import { users } from "./schema";
-import { eq } from "drizzle-orm";
-import createHttpError from "http-errors";
 import { NewUser, User, userSelectSchema } from "./user";
 
 const helloWorldEndpoint = defaultEndpointsFactory.build({
