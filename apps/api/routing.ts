@@ -26,14 +26,17 @@ const helloWorldEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const officeListOutput = z.object({
+  offices: officeSelectSchema.array(),
+});
+export type OfficeListOutput = z.infer<typeof officeListOutput>;
+
 const officesListEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
   input: z.object({
     name: z.string().optional(),
   }),
-  output: z.object({
-    offices: officeSelectSchema.array(),
-  }),
+  output: officeListOutput,
   handler: async ({ input: { name }, options, logger }) => {
     const offices: Office[] = await db.select().from(officesTable);
 

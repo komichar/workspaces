@@ -50,6 +50,10 @@ export const NAV_ITEMS: Array<INavItem> = [
     href: "/products",
   },
   {
+    label: "Offices",
+    href: "/offices",
+  },
+  {
     label: "Cart",
     href: "/cart/1",
   },
