@@ -1,10 +1,11 @@
-import { eq } from "drizzle-orm";
+import { and, eq, ilike, like, sql } from "drizzle-orm";
 import { defaultEndpointsFactory, Routing } from "express-zod-api";
 import createHttpError from "http-errors";
 import { z } from "zod";
-import { db } from "./database";
-import { users } from "./schema";
+import { db, ilikeSqlite } from "./database";
+import { officesTable, usersTable } from "./schema";
 import { NewUser, User, userSelectSchema } from "./user";
+import { Office, officeSelectSchema } from "./office";
 
 const helloWorldEndpoint = defaultEndpointsFactory.build({
   // method: "get" (default) or array ["get", "post", ...]
@@ -20,6 +21,99 @@ const helloWorldEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const officesEndpoint = defaultEndpointsFactory.build({
+  method: "get", // (default) or array ["get", "post", ...]
+  input: z.object({
+    name: z.string().optional(),
+  }),
+  output: z.object({
+    offices: officeSelectSchema.array(),
+  }),
+  handler: async ({ input: { name }, options, logger }) => {
+    const offices: Office[] = await db.select().from(officesTable);
+
+    logger.debug("Options:", options); // middlewares provide options
+    return { offices };
+  },
+});
+
+const officeByIdEndpoint = defaultEndpointsFactory.build({
+  method: "get", // (default) or array ["get", "post", ...]
+  input: z.object({
+    id: z.coerce.number().positive(),
+  }),
+  output: officeSelectSchema,
+  handler: async ({ input, options, logger }) => {
+    const [office]: Office[] = await db
+      .select()
+      .from(officesTable)
+      .where(eq(officesTable.id, input.id))
+      .limit(1);
+
+    logger.debug("Options:", options); // middlewares provide options
+
+    return office;
+  },
+});
+
+const userByIdEndpoint = defaultEndpointsFactory.build({
+  method: "get", // (default) or array ["get", "post", ...]
+  input: z.object({
+    id: z.coerce.number().positive(),
+  }),
+  output: userSelectSchema,
+  handler: async ({ input, options, logger }) => {
+    const [user]: User[] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, input.id))
+      .limit(1);
+
+    logger.debug("Options:", options); // middlewares provide options
+
+    return user;
+  },
+});
+
+const usersEndpoint = defaultEndpointsFactory.build({
+  method: "get", // (default) or array ["get", "post", ...]
+  input: z.object({
+    id: z.coerce.number().positive().optional(),
+    name: z.string().optional(),
+    email: z.string().optional(),
+    admin: z
+      .string()
+      .optional()
+      .transform((value) => {
+        if (value === undefined) return undefined;
+        if (value == "true") return true;
+        if (value == "false") return false;
+        return undefined; // Default to undefined for invalid inputs
+      }),
+  }),
+  output: z.object({
+    users: userSelectSchema.array(),
+  }),
+  handler: async ({ input, options, logger }) => {
+    console.log("input", input);
+    const users: User[] = await db
+      .select()
+      .from(usersTable)
+      .where(
+        and(
+          input.id ? eq(usersTable.id, input.id) : undefined,
+          input.email ? eq(usersTable.email, input.email) : undefined,
+          input.admin != undefined
+            ? eq(usersTable.admin, input.admin)
+            : undefined
+        )
+      );
+
+    logger.debug("Options:", options); // middlewares provide options
+    return { users };
+  },
+});
+
 const authLoginEndpoint = defaultEndpointsFactory.build({
   method: "post", //  (default) or array ["get", "post", ...]
   input: z.object({
@@ -32,8 +126,8 @@ const authLoginEndpoint = defaultEndpointsFactory.build({
   handler: async ({ input, options, logger }) => {
     const [user] = await db
       .select()
-      .from(users)
-      .where(eq(users.email, input.email))
+      .from(usersTable)
+      .where(eq(usersTable.email, input.email))
       .limit(1);
 
     if (!user) {
@@ -64,7 +158,7 @@ const authRegisterEndpoint = defaultEndpointsFactory.build({
     };
 
     const [registered]: User[] = await db
-      .insert(users)
+      .insert(usersTable)
       .values(newUser)
       .returning();
 
@@ -81,5 +175,11 @@ export const routing: Routing = {
       login: authLoginEndpoint,
       register: authRegisterEndpoint,
     },
+    offices: officesEndpoint.nest({
+      ":id": officeByIdEndpoint,
+    }),
+    users: usersEndpoint.nest({
+      ":id": userByIdEndpoint,
+    }),
   },
 };

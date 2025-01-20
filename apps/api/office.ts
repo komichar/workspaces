@@ -1,7 +1,7 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { offices } from "./schema";
+import { officesTable } from "./schema";
 
-const officeSelectSchema = createSelectSchema(offices);
+export const officeSelectSchema = createSelectSchema(officesTable);
 
 export type Office = z.infer<typeof officeSelectSchema>;

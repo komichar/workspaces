@@ -1,9 +1,9 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { users } from "./schema";
+import { usersTable } from "./schema";
 
-export const userSelectSchema = createSelectSchema(users);
+export const userSelectSchema = createSelectSchema(usersTable);
 
 export type User = z.infer<typeof userSelectSchema>;
 
-export type NewUser = typeof users.$inferInsert;
+export type NewUser = typeof usersTable.$inferInsert;
