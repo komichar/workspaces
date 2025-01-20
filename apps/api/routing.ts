@@ -1,9 +1,13 @@
 import { and, eq } from "drizzle-orm";
-import { defaultEndpointsFactory, Routing } from "express-zod-api";
+import {
+  defaultEndpointsFactory,
+  DependsOnMethod,
+  Routing,
+} from "express-zod-api";
 import createHttpError from "http-errors";
 import { z } from "zod";
 import { db } from "./database";
-import { Office, officeSelectSchema } from "./office";
+import { NewOffice, Office, officeSelectSchema } from "./office";
 import { Reservation, reservationSelectSchema } from "./reservation";
 import { officesTable, reservationsTable, usersTable } from "./schema";
 import { NewUser, User, userSelectSchema } from "./user";
@@ -22,7 +26,7 @@ const helloWorldEndpoint = defaultEndpointsFactory.build({
   },
 });
 
-const officesEndpoint = defaultEndpointsFactory.build({
+const officesListEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
   input: z.object({
     name: z.string().optional(),
@@ -57,6 +61,32 @@ const officeByIdEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const officeCreateEndpoint = defaultEndpointsFactory.build({
+  method: "post", // (default) or array ["get", "post", ...]
+  input: z.object({
+    city: z.string().min(3).max(255),
+    capacity: z.number().min(1).max(1000),
+    is_peak_limited: z.boolean(),
+  }),
+  output: officeSelectSchema,
+  handler: async ({ input, options, logger }) => {
+    const newOffice: NewOffice = {
+      city: input.city,
+      capacity: input.capacity,
+      is_peak_limited: input.is_peak_limited,
+    };
+
+    const [createdOffice]: Office[] = await db
+      .insert(officesTable)
+      .values(newOffice)
+      .returning();
+
+    logger.debug("Options:", options); // middlewares provide options
+
+    return createdOffice;
+  },
+});
+
 const userByIdEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
   input: z.object({
@@ -76,7 +106,7 @@ const userByIdEndpoint = defaultEndpointsFactory.build({
   },
 });
 
-const usersEndpoint = defaultEndpointsFactory.build({
+const usersListEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
   input: z.object({
     id: z.coerce.number().positive().optional(),
@@ -115,7 +145,7 @@ const usersEndpoint = defaultEndpointsFactory.build({
   },
 });
 
-const reservationsEndpoint = defaultEndpointsFactory.build({
+const reservationsListEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
   input: z.object({}),
   output: z.object({
@@ -224,13 +254,18 @@ export const routing: Routing = {
       login: authLoginEndpoint,
       register: authRegisterEndpoint,
     },
-    offices: officesEndpoint.nest({
-      ":id": officeByIdEndpoint,
+    offices: new DependsOnMethod({
+      get: officesListEndpoint,
+      post: officeCreateEndpoint,
+    }).nest({
+      ":id": new DependsOnMethod({
+        get: officeByIdEndpoint,
+      }),
     }),
-    users: usersEndpoint.nest({
+    users: usersListEndpoint.nest({
       ":id": userByIdEndpoint,
     }),
-    reservations: reservationsEndpoint.nest({
+    reservations: reservationsListEndpoint.nest({
       ":id": reservationByIdEndpoint,
     }),
   },
