@@ -1,14 +1,15 @@
-import { and, eq, ilike, like, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { defaultEndpointsFactory, Routing } from "express-zod-api";
 import createHttpError from "http-errors";
 import { z } from "zod";
-import { db, ilikeSqlite } from "./database";
-import { officesTable, usersTable } from "./schema";
-import { NewUser, User, userSelectSchema } from "./user";
+import { db } from "./database";
 import { Office, officeSelectSchema } from "./office";
+import { Reservation, reservationSelectSchema } from "./reservation";
+import { officesTable, reservationsTable, usersTable } from "./schema";
+import { NewUser, User, userSelectSchema } from "./user";
 
 const helloWorldEndpoint = defaultEndpointsFactory.build({
-  // method: "get" (default) or array ["get", "post", ...]
+  method: "get", // (default) or array ["get", "post", ...]
   input: z.object({
     name: z.string().optional(),
   }),
@@ -114,6 +115,54 @@ const usersEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const reservationsEndpoint = defaultEndpointsFactory.build({
+  method: "get", // (default) or array ["get", "post", ...]
+  input: z.object({}),
+  output: z.object({
+    reservations: reservationSelectSchema.array(),
+  }),
+  handler: async ({ input, options, logger }) => {
+    console.log("input", input);
+    const reservations: Reservation[] = await db
+      .select()
+      .from(reservationsTable)
+      .where(
+        and(
+          input.id ? eq(usersTable.id, input.id) : undefined,
+          input.admin != undefined
+            ? eq(usersTable.admin, input.admin)
+            : undefined
+        )
+      );
+
+    logger.debug("Options:", options); // middlewares provide options
+    return { reservations };
+  },
+});
+
+const reservationByIdEndpoint = defaultEndpointsFactory.build({
+  method: "get", // (default) or array ["get", "post", ...]
+  input: z.object({
+    id: z.coerce.number().positive(),
+  }),
+  output: reservationSelectSchema,
+  handler: async ({ input, options, logger }) => {
+    const [reservation]: Reservation[] = await db
+      .select()
+      .from(reservationsTable)
+      .where(eq(reservationsTable.id, input.id))
+      .limit(1);
+
+    if (!reservation) {
+      throw createHttpError.NotFound();
+    }
+
+    logger.debug("Options:", options); // middlewares provide options
+
+    return reservation;
+  },
+});
+
 const authLoginEndpoint = defaultEndpointsFactory.build({
   method: "post", //  (default) or array ["get", "post", ...]
   input: z.object({
@@ -131,7 +180,7 @@ const authLoginEndpoint = defaultEndpointsFactory.build({
       .limit(1);
 
     if (!user) {
-      throw createHttpError.NotFound("john not found");
+      throw createHttpError.NotFound();
     }
 
     logger.debug("Options:", options); // middlewares provide options
@@ -180,6 +229,9 @@ export const routing: Routing = {
     }),
     users: usersEndpoint.nest({
       ":id": userByIdEndpoint,
+    }),
+    reservations: reservationsEndpoint.nest({
+      ":id": reservationByIdEndpoint,
     }),
   },
 };

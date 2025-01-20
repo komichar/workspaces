@@ -1,7 +1,7 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { reservations } from "./schema";
+import { reservationsTable } from "./schema";
 
-const reservationSelectSchema = createSelectSchema(reservations);
+export const reservationSelectSchema = createSelectSchema(reservationsTable);
 
 export type Reservation = z.infer<typeof reservationSelectSchema>;
