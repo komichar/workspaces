@@ -16,7 +16,7 @@ const OfficeCard = ({ city, capacity, is_peak_limited, id }: Office) => {
   return (
     <VStack spacing={3} overflow="hidden" rounded="lg">
       <Box
-        onClick={() => navigate(`/products/${id}`)}
+        onClick={() => navigate(`/offices/${id}`)}
         cursor="pointer"
         h={64}
         w="lg"
@@ -33,7 +33,7 @@ const OfficeCard = ({ city, capacity, is_peak_limited, id }: Office) => {
         >
           <Text
             isTruncated
-            onClick={() => navigate(`/products/${id}`)}
+            onClick={() => navigate(`/offices/${id}`)}
             cursor="pointer"
           >
             {city}

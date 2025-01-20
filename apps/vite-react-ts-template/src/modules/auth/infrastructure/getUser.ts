@@ -1,13 +1,14 @@
-import { omit } from "lodash-es";
+import {
+  httpServiceReservationSystem,
+  ReservationSystemResponseWrapper,
+} from "utils/http";
+import type { UserByIdOutput } from "../../../../../api/routing";
+import type { User } from "../../../../../api/user";
 
-import { httpService } from "utils";
+export const getUser = async (id: string): Promise<User> => {
+  const response = await httpServiceReservationSystem.get<
+    ReservationSystemResponseWrapper<UserByIdOutput>
+  >(`v1/users/${id}`);
 
-import { IUser } from "../types";
-import { IUserDto } from "./types/IUserDto";
-
-export const getUser = () => {
-  // mocking current user and its cartId by passing id=1
-  return httpService
-    .get<IUserDto>("users/1")
-    .then((res) => ({ ...(omit(res, "password") as IUser), cartId: 1 }));
+  return response.data.user;
 };

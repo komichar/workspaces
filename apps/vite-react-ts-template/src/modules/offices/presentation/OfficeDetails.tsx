@@ -1,41 +1,35 @@
 import {
-  chakra,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
+  chakra,
+  Divider,
+  GridItem,
   HStack,
+  SimpleGrid,
   Text,
   VStack,
-  SimpleGrid,
-  GridItem,
-  Divider,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
 } from "@chakra-ui/react";
 import { useSecondaryTextColor } from "theme";
 
-import { moneyVO, t } from "utils";
+import { t } from "utils";
 
 import { PageHeader } from "shared/Layout";
 
-import {
-  AddToCartButton,
-  ProductAddedDialog,
-} from "modules/carts/presentation";
+import { AddToCartButton } from "modules/carts/presentation";
 
-import { IProduct } from "../types";
-import { StarRating } from "./StarRating";
-import { useCategoryLabel } from "./useCategoryLabel";
+import { Office } from "../../../../../api/office";
 
 interface IProps {
-  product: IProduct;
+  office: Office;
   onBack: () => void;
 }
 
-const OfficeDetails = ({ product, onBack }: IProps) => {
-  const categoryLabel = useCategoryLabel(product.category);
+const OfficeDetails = ({ office, onBack }: IProps) => {
   const secondaryColor = useSecondaryTextColor();
 
   return (
@@ -45,7 +39,6 @@ const OfficeDetails = ({ product, onBack }: IProps) => {
       columns={{ base: 1, lg: 2 }}
       gap={{ base: 6, md: 8 }}
     >
-      <ProductAddedDialog />
       <GridItem colSpan={1}>
         <Box overflow="hidden" rounded="xl">
           <Box
@@ -53,30 +46,26 @@ const OfficeDetails = ({ product, onBack }: IProps) => {
             w="100%"
             bgSize="cover"
             bgPos="center"
-            style={{
-              backgroundImage: `url(${product.image})`,
-            }}
           />
         </Box>
       </GridItem>
       <GridItem colSpan={1}>
         <VStack spacing={{ base: 1, lg: 3 }} w="100%" align="start">
           <PageHeader
-            title={product.title}
+            title={office.city}
             description={t("A part of out {category} collection.", {
               category: (
-                <chakra.span fontStyle="italic">{categoryLabel}</chakra.span>
+                <chakra.span fontStyle="italic">{office.id}</chakra.span>
               ),
             })}
           />
           <HStack w="100%" height="24px" spacing={4}>
             <Text fontWeight="semibold" fontSize={{ base: "lg", md: "xl" }}>
-              {moneyVO.format(product.price)}
+              {office.is_peak_limited ? "Peak limited" : "Not peak limited"}
             </Text>
             <Divider orientation="vertical" />
-            <StarRating rating={product.rating.rate} />
             <Button variant="link" colorScheme="orange">
-              {t("See all {number} reviews", { number: product.rating.count })}
+              test
             </Button>
           </HStack>
           <Text
@@ -84,12 +73,12 @@ const OfficeDetails = ({ product, onBack }: IProps) => {
             fontSize={{ base: "md", md: "lg" }}
             py={{ base: 4, md: 6 }}
           >
-            {product.description}
+            ID: {office.id}
           </Text>
           <VStack w="100%">
-            <AddToCartButton productId={product.id} colorScheme="orange" />
+            <AddToCartButton productId={office.id} colorScheme="orange" />
             <Button w="100%" variant="outline" onClick={onBack}>
-              {t("Back to products' list")}
+              {t("Back to offices list")}
             </Button>
           </VStack>
           <Accordion w="100%" pt={4} defaultIndex={[0]}>

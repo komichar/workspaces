@@ -1,29 +1,20 @@
-import { UseQueryOptions } from "@tanstack/react-query";
+import { buildUrl, queryClient, useQuery } from "utils";
 
-import { IQueryParams, IMeta } from "types";
-
-import { buildUrl, httpService, queryClient, useQuery } from "utils";
-
-import type { Office } from "../../../../../api/office";
+import {
+  httpServiceReservationSystem,
+  ReservationSystemResponseWrapper,
+} from "utils/http";
 import type { OfficeListOutput } from "../../../../../api/routing";
-import { Logger } from "utils/logger";
-import { httpServiceReservationSystem } from "utils/http";
 
 export const getOfficesQueryKey = () => ["offices"];
-
-const url = buildUrl("v1/offices");
-Logger.debug(url);
-
-type ResponseWrapper<T> = {
-  status: string;
-  data: T;
-};
 
 const getOfficesQuery = () => ({
   queryKey: getOfficesQueryKey(),
   queryFn: (): Promise<OfficeListOutput> =>
     httpServiceReservationSystem
-      .get<ResponseWrapper<OfficeListOutput>>(url)
+      .get<ReservationSystemResponseWrapper<OfficeListOutput>>(
+        buildUrl("v1/offices")
+      )
       .then((res) => ({
         offices: res.data.offices,
       })),

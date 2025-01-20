@@ -5,6 +5,8 @@ import { createStore, useStore } from "zustand";
 import { getUser, loginUser } from "../infrastructure";
 import { ICredentials } from "../infrastructure/loginUser";
 import { IUser } from "../types";
+import { AuthLoginOutput } from "../../../../../api/routing";
+import { User } from "../../../../../api/user";
 
 const AUTH_KEY = "fake_store_is_authenticated";
 
@@ -15,7 +17,7 @@ interface IStore {
   isAuthenticated: boolean;
   isError: boolean;
   state: "idle" | "loading" | "finished";
-  user: IUser;
+  user: User | undefined;
   login: (credentials: ICredentials) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -39,7 +41,7 @@ export const initializeAuthStore = (preloadedState: Partial<IStore> = {}) => {
     if (isLoggedIn()) {
       set({ state: "loading" });
 
-      getUser()
+      getUser("1")
         .then((user) => {
           set({
             user,
@@ -61,21 +63,25 @@ export const initializeAuthStore = (preloadedState: Partial<IStore> = {}) => {
       isAuthenticated: false,
       isError: false,
       state: isLoggedIn() ? "idle" : "finished",
-      user: undefined as unknown as IUser,
+      user: undefined,
       ...preloadedState,
       login: async (credentials: ICredentials) => {
+        debugger;
         set({ state: "loading" });
 
         try {
-          await loginUser(credentials);
-          const user = await getUser();
+          const loginResult = await loginUser({ email: credentials.username });
+
+          // const user = await getUser(); // keep this logic for refetching user data after refresh
+          const user = await getUser(loginResult.data.user.id.toString());
 
           localStorage.setItem(AUTH_KEY, "true");
+          localStorage.setItem("user_id", user.id.toString());
 
           set({
             isAuthenticated: true,
             state: "finished",
-            user,
+            user: loginResult.data.user,
           });
         } catch (e) {
           localStorage.setItem(AUTH_KEY, "false");

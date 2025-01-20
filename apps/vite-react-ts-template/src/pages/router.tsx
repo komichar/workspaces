@@ -8,6 +8,7 @@ import { homePageLoader } from "./Home/loader";
 import { productPageLoader } from "./Product/loader";
 import { productsPageLoader } from "./Products/loader";
 import { officesPageLoader } from "./Offices/loader";
+import { officePageLoader } from "./Office/loader";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,11 @@ export const router = createBrowserRouter([
         path: "/offices",
         loader: officesPageLoader,
         lazy: () => import("./Offices"),
+      },
+      {
+        path: "/offices/:officeId",
+        loader: officePageLoader,
+        lazy: () => import("./Office"),
       },
       {
         path: "/products/:productId",

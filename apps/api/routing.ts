@@ -45,14 +45,17 @@ const officesListEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const officeByIdOutput = z.object({
+  office: officeSelectSchema,
+});
+export type OfficeByIdOutput = z.infer<typeof officeByIdOutput>;
+
 const officeByIdEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
   input: z.object({
     id: z.coerce.number().positive(),
   }),
-  output: z.object({
-    office: officeSelectSchema,
-  }),
+  output: officeByIdOutput,
   handler: async ({ input, options, logger }) => {
     const [office]: Office[] = await db
       .select()
@@ -94,14 +97,16 @@ const officeCreateEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const userByIdOutput = z.object({
+  user: userSelectSchema,
+});
+export type UserByIdOutput = z.infer<typeof userByIdOutput>;
 const userByIdEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
   input: z.object({
     id: z.coerce.number().positive(),
   }),
-  output: z.object({
-    user: userSelectSchema,
-  }),
+  output: userByIdOutput,
   handler: async ({ input, options, logger }) => {
     const [user]: User[] = await db
       .select()
@@ -204,15 +209,20 @@ const reservationByIdEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const authLoginInput = z.object({
+  email: z.string().email(),
+});
+export type AuthLoginInput = z.infer<typeof authLoginInput>;
+
+const authLoginOutput = z.object({
+  user: userSelectSchema,
+  token: z.string(),
+});
+export type AuthLoginOutput = z.infer<typeof authLoginOutput>;
 const authLoginEndpoint = defaultEndpointsFactory.build({
   method: "post", //  (default) or array ["get", "post", ...]
-  input: z.object({
-    email: z.string().email(),
-  }),
-  output: z.object({
-    user: userSelectSchema,
-    token: z.string(),
-  }),
+  input: authLoginInput,
+  output: authLoginOutput,
   handler: async ({ input, options, logger }) => {
     const [user] = await db
       .select()

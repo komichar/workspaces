@@ -17,6 +17,11 @@ export const httpServiceReservationSystem = new HttpService(
   new KyClient({ prefixUrl: reservationSystemApiHost, headers })
 );
 
+export type ReservationSystemResponseWrapper<T> = {
+  status: string;
+  data: T;
+};
+
 export {
   InternalServerException,
   ResourceNotFoundException,

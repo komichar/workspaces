@@ -6,7 +6,7 @@ import { Logger } from "utils/logger";
 import { useAuthStore } from "modules/auth/application";
 
 export const useClearCart = () => {
-  const cartId = useAuthStore((store) => store.user.cartId);
+  const cartId = 4;
 
   const { mutateAsync, isLoading } = useMutation(() =>
     httpService.delete(`carts/${cartId}`)
