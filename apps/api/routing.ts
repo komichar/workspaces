@@ -47,7 +47,9 @@ const officeByIdEndpoint = defaultEndpointsFactory.build({
   input: z.object({
     id: z.coerce.number().positive(),
   }),
-  output: officeSelectSchema,
+  output: z.object({
+    office: officeSelectSchema,
+  }),
   handler: async ({ input, options, logger }) => {
     const [office]: Office[] = await db
       .select()
@@ -57,7 +59,7 @@ const officeByIdEndpoint = defaultEndpointsFactory.build({
 
     logger.debug("Options:", options); // middlewares provide options
 
-    return office;
+    return { office };
   },
 });
 
@@ -68,7 +70,9 @@ const officeCreateEndpoint = defaultEndpointsFactory.build({
     capacity: z.number().min(1).max(1000),
     is_peak_limited: z.boolean(),
   }),
-  output: officeSelectSchema,
+  output: z.object({
+    office: officeSelectSchema,
+  }),
   handler: async ({ input, options, logger }) => {
     const newOffice: NewOffice = {
       city: input.city,
@@ -83,7 +87,7 @@ const officeCreateEndpoint = defaultEndpointsFactory.build({
 
     logger.debug("Options:", options); // middlewares provide options
 
-    return createdOffice;
+    return { office: createdOffice };
   },
 });
 
@@ -92,7 +96,9 @@ const userByIdEndpoint = defaultEndpointsFactory.build({
   input: z.object({
     id: z.coerce.number().positive(),
   }),
-  output: userSelectSchema,
+  output: z.object({
+    user: userSelectSchema,
+  }),
   handler: async ({ input, options, logger }) => {
     const [user]: User[] = await db
       .select()
@@ -102,7 +108,7 @@ const userByIdEndpoint = defaultEndpointsFactory.build({
 
     logger.debug("Options:", options); // middlewares provide options
 
-    return user;
+    return { user };
   },
 });
 
@@ -175,7 +181,9 @@ const reservationByIdEndpoint = defaultEndpointsFactory.build({
   input: z.object({
     id: z.coerce.number().positive(),
   }),
-  output: reservationSelectSchema,
+  output: z.object({
+    reservation: reservationSelectSchema,
+  }),
   handler: async ({ input, options, logger }) => {
     const [reservation]: Reservation[] = await db
       .select()
@@ -189,7 +197,7 @@ const reservationByIdEndpoint = defaultEndpointsFactory.build({
 
     logger.debug("Options:", options); // middlewares provide options
 
-    return reservation;
+    return { reservation };
   },
 });
 
