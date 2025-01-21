@@ -1,7 +1,15 @@
 import { useMemo, useState } from "react";
 
 import { SettingsIcon } from "@chakra-ui/icons";
-import { Box, Button, Heading, HStack, Stack, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 
 import { IQueryParams } from "types";
 
@@ -58,7 +66,8 @@ const ReservationsPage = () => {
             <Box p={4} bg="gray.100" key={day.date} borderRadius={8}>
               <HStack justify={"space-between"} alignContent={"center"}>
                 <Heading as="h4" size="md">
-                  {day.date}, {day.dayName}
+                  <Text color="gray.400">{day.date}</Text>
+                  <Text>{day.dayName}</Text>
                 </Heading>
                 <Stack direction="row" spacing={4}>
                   <Button isLoading={false} colorScheme="teal" variant="solid">
