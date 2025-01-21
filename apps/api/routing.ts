@@ -169,7 +169,7 @@ const reservationsListOutput = z.object({
 });
 export type ReservationsListOutput = z.infer<typeof reservationsListOutput>;
 const reservationsListInput = z.object({
-  user_id: z.coerce.number().positive(),
+  user_id: z.coerce.number().positive().optional(),
   office_id: z.coerce.number().positive(),
   date: z.string().length(10),
 });
@@ -186,7 +186,9 @@ const reservationsListEndpoint = defaultEndpointsFactory.build({
       .from(reservationsTable)
       .where(
         and(
-          eq(reservationsTable.user_id, input.user_id),
+          input.user_id
+            ? eq(reservationsTable.user_id, input.user_id)
+            : undefined,
           eq(reservationsTable.office_id, input.office_id),
           eq(reservationsTable.date, input.date)
         )
@@ -230,10 +232,30 @@ const reservationsCreateEndpoint = defaultEndpointsFactory.build({
       throw createHttpError.BadRequest("Seat number is invalid");
     }
 
+    // check if user has already booked a seat for the same date
+
+    const [existingReservation] = await db
+      .select()
+      .from(reservationsTable)
+      .where(
+        and(
+          eq(reservationsTable.user_id, input.user_id),
+          eq(reservationsTable.office_id, input.office_id),
+          eq(reservationsTable.date, input.date)
+        )
+      )
+      .limit(1);
+
+    if (existingReservation) {
+      throw createHttpError.BadRequest(
+        "User already has a reservation for this date"
+      );
+    }
+
     // TODO: calculate high demand, throw 400 if peak limited & hours dont match
     // high demand if 75% of a day's time is already booked, capacity * 0.75 * 8h
 
-    const nu: NewReservation = {
+    const newReservation: NewReservation = {
       user_id: input.user_id,
       office_id: input.office_id,
       date: input.date,
@@ -242,14 +264,14 @@ const reservationsCreateEndpoint = defaultEndpointsFactory.build({
       seat_number: input.seat_number,
     };
 
-    const [reservation] = await db
+    const [createdReservation] = await db
       .insert(reservationsTable)
-      .values(nu)
+      .values(newReservation)
       .returning();
 
     logger.debug("Options:", options); // middlewares provide options
 
-    return { reservation: reservation };
+    return { reservation: createdReservation };
   },
 });
 
