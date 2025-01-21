@@ -1,9 +1,8 @@
 TODO
 
-- [ ] setup pnpm, package json
-- [ ] setup domain models
-- [ ] implement API layer
-- [ ] implement WEB UI
+- [ ] implement API authorization on some endpoints
+- [ ] implement API typescript building, tsconfig, src
+- [ ] cleanup WEB UI
 
 FIRST TIME SETUP
 
