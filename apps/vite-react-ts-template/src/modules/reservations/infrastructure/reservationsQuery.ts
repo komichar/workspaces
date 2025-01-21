@@ -12,6 +12,8 @@ import { useMutation } from "@tanstack/react-query";
 
 export const getReservationsQueryKey = () => ["reservations"]; // TODO: improve key with other params
 
+// TOOD: read response header about high demand and persist that data
+// in order to show on UI
 const getReservationsQuery = (params: ReservationsListInput) => ({
   queryKey: getReservationsQueryKey(),
   queryFn: (): Promise<ReservationsListOutput> =>

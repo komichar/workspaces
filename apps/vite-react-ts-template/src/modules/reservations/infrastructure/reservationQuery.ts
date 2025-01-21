@@ -5,9 +5,11 @@ import {
   ReservationSystemResponseWrapper,
 } from "utils/http";
 import type {
+  CreateReservationInput,
   ReservationsListInput,
   ReservationsListOutput,
 } from "../../../../../api/routing";
+import { useMutation } from "@tanstack/react-query";
 
 export const getReservationQueryKey = () => ["reservation"]; // TODO: improve key with other params
 
@@ -23,18 +25,6 @@ const getReservationQuery = (params: ReservationsListInput) => ({
       })),
 });
 
-const cancelReservationMutation = (id: number) => ({
-  queryKey: getReservationQueryKey(),
-  queryFn: (): Promise<ReservationsListOutput> =>
-    httpServiceReservationSystem
-      .delete<ReservationSystemResponseWrapper<ReservationsListOutput>>(
-        buildUrl<ReservationsListInput>(`v1/reservation/${id}`)
-      )
-      .then((res) => ({
-        reservations: res.data.reservations,
-      })),
-});
-
 export const useReservationQuery = (params: ReservationsListInput) => {
   return useQuery({
     ...getReservationQuery(params),
@@ -43,3 +33,32 @@ export const useReservationQuery = (params: ReservationsListInput) => {
 
 export const reservationLoader = async (params: ReservationsListInput) =>
   queryClient.ensureQueryData(getReservationQuery(params));
+
+export const getReservationCreateMutation = () => ({
+  mutationFn: async (input: CreateReservationInput) => {
+    return httpServiceReservationSystem.post(
+      buildUrl(`v1/reservations`),
+      input
+    );
+  },
+});
+
+export const useReservationCreateMutation = () => {
+  return useMutation({
+    ...getReservationCreateMutation(),
+  });
+};
+
+export const getReservationDeleteMutation = () => ({
+  mutationFn: async (id: number) => {
+    return httpServiceReservationSystem.delete(
+      buildUrl(`v1/reservations/${id}`)
+    );
+  },
+});
+
+export const useReservationDeleteMutation = () => {
+  return useMutation({
+    ...getReservationDeleteMutation(),
+  });
+};

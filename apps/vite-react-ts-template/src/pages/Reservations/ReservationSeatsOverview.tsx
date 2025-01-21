@@ -1,17 +1,18 @@
 import { ArrowBackIcon, SettingsIcon } from "@chakra-ui/icons";
 import { Box, Button, Grid, GridItem, Text, VStack } from "@chakra-ui/react";
-import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "modules/auth/application";
 import { useOfficeQuery } from "modules/offices/infrastructure";
 import { useReservationsQuery } from "modules/reservations/infrastructure";
-import { useMemo } from "react";
+import {
+  useReservationCreateMutation,
+  useReservationDeleteMutation,
+} from "modules/reservations/infrastructure";
+import { useMemo, useRef } from "react";
 import { Page, PageHeader } from "shared/Layout";
 import { useNavigate, useParams } from "shared/Router";
 import { useNotImplementedYetToast } from "shared/Toast";
-import { buildUrl } from "utils";
-import { httpServiceReservationSystem } from "utils/http";
+
 import type { Reservation } from "../../../../api/reservation";
-import type { CreateReservationInput } from "../../../../api/routing";
 
 type AvailableReservation = Omit<Reservation, "user_id"> & {
   user_id: null;
@@ -24,22 +25,9 @@ export const ReservationSeatsOverview = () => {
   const params = useParams<{ date: string }>();
   const navigate = useNavigate();
 
-  const cancelReservationMutation = useMutation({
-    mutationFn: async (id: number) => {
-      return httpServiceReservationSystem.delete(
-        buildUrl(`v1/reservations/${id}`)
-      );
-    },
-  });
+  const reservationDeleteMutation = useReservationDeleteMutation();
 
-  const createReservationMutation = useMutation({
-    mutationFn: async (input: CreateReservationInput) => {
-      return httpServiceReservationSystem.post(
-        buildUrl(`v1/reservations`),
-        input
-      );
-    },
-  });
+  const reservationCreationMutation = useReservationCreateMutation();
 
   const user = useAuthStore((store) => store.user);
 
@@ -93,8 +81,10 @@ export const ReservationSeatsOverview = () => {
     return combined;
   }, [
     JSON.stringify(user),
-    JSON.stringify(reservations.data),
-    JSON.stringify(office.data),
+    // JSON.stringify(reservations.data),
+    // JSON.stringify(office.data),
+    reservations.dataUpdatedAt,
+    office.dataUpdatedAt,
   ]);
 
   if (reservations.isInitialLoading) {
@@ -138,8 +128,8 @@ export const ReservationSeatsOverview = () => {
 
                 {available ? (
                   <Button
-                    onClick={() => {
-                      createReservationMutation.mutate({
+                    onClick={async () => {
+                      await reservationCreationMutation.mutateAsync({
                         user_id: user.id,
                         office_id: user.office_id as number,
                         date: params.date as string,
@@ -147,9 +137,7 @@ export const ReservationSeatsOverview = () => {
                         seat_number: reservation.seat_number,
                         start_time: "00:00:00",
                       });
-                      if (createReservationMutation.isSuccess) {
-                        reservations.refetch();
-                      }
+                      await reservations.refetch();
                     }}
                     rightIcon={<SettingsIcon />}
                   >
@@ -157,11 +145,11 @@ export const ReservationSeatsOverview = () => {
                   </Button>
                 ) : (
                   <Button
-                    onClick={() => {
-                      cancelReservationMutation.mutate(reservation.id);
-                      if (cancelReservationMutation.isSuccess) {
-                        reservations.refetch();
-                      }
+                    onClick={async () => {
+                      await reservationDeleteMutation.mutateAsync(
+                        reservation.id
+                      );
+                      await reservations.refetch();
                     }}
                     rightIcon={<SettingsIcon />}
                   >
