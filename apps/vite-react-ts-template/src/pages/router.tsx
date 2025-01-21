@@ -34,6 +34,10 @@ export const router = createBrowserRouter([
         lazy: () => import("./Products"),
       },
       {
+        path: "/reservations",
+        lazy: () => import("./Reservations"),
+      },
+      {
         path: "/offices",
         loader: officesPageLoader,
         lazy: () => import("./Offices"),
