@@ -59,7 +59,7 @@ export const Navbar = () => {
             textAlign={useBreakpointValue({ base: "center", md: "left" })}
             fontWeight="extrabold"
           >
-            Logo
+            Reservation System
           </Text>
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNav />

@@ -23,3 +23,6 @@ storybook-static
 *.sw?
 
 .pnpm-store
+
+.vscode/launch.json
+.vscode/settings.json

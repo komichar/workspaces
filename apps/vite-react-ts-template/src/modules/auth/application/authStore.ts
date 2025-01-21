@@ -2,11 +2,9 @@ import { createContext, useContext } from "react";
 
 import { createStore, useStore } from "zustand";
 
+import { User } from "../../../../../api/user";
 import { getUser, loginUser } from "../infrastructure";
 import { ICredentials } from "../infrastructure/loginUser";
-import { IUser } from "../types";
-import { AuthLoginOutput } from "../../../../../api/routing";
-import { User } from "../../../../../api/user";
 
 const AUTH_KEY = "fake_store_is_authenticated";
 
@@ -66,7 +64,6 @@ export const initializeAuthStore = (preloadedState: Partial<IStore> = {}) => {
       user: undefined,
       ...preloadedState,
       login: async (credentials: ICredentials) => {
-        debugger;
         set({ state: "loading" });
 
         try {
