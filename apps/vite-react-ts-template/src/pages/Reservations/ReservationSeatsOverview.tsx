@@ -2,12 +2,12 @@ import { ArrowBackIcon, SettingsIcon } from "@chakra-ui/icons";
 import { Box, Button, Grid, GridItem, Text, VStack } from "@chakra-ui/react";
 import { useAuthStore } from "modules/auth/application";
 import { useOfficeQuery } from "modules/offices/infrastructure";
-import { useReservationsQuery } from "modules/reservations/infrastructure";
 import {
   useReservationCreateMutation,
   useReservationDeleteMutation,
+  useReservationsQuery,
 } from "modules/reservations/infrastructure";
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { Page, PageHeader } from "shared/Layout";
 import { useNavigate, useParams } from "shared/Router";
 import { useNotImplementedYetToast } from "shared/Toast";
