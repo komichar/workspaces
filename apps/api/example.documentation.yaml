@@ -806,6 +806,60 @@ paths:
                     status: error
                     error:
                       message: Sample error message
+    delete:
+      operationId: DeleteV1ReservationsId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: DELETE /v1/reservations/:id Parameter
+          schema:
+            type: number
+            format: double
+            exclusiveMinimum: 0
+            maximum: 1.7976931348623157e+308
+      responses:
+        "200":
+          description: DELETE /v1/reservations/:id Positive response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: success
+                  data:
+                    type: object
+                required:
+                  - status
+                  - data
+        "400":
+          description: DELETE /v1/reservations/:id Negative response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
   /v1/reservations:
     get:
       operationId: GetV1Reservations
@@ -899,6 +953,134 @@ paths:
                   - data
         "400":
           description: GET /v1/reservations Negative response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
+    post:
+      operationId: PostV1Reservations
+      requestBody:
+        description: POST /v1/reservations Request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: number
+                  format: double
+                  exclusiveMinimum: 0
+                  maximum: 1.7976931348623157e+308
+                office_id:
+                  type: number
+                  format: double
+                  exclusiveMinimum: 0
+                  maximum: 1.7976931348623157e+308
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                start_time:
+                  type: string
+                  minLength: 8
+                  maxLength: 8
+                end_time:
+                  type: string
+                  minLength: 8
+                  maxLength: 8
+                seat_number:
+                  type: number
+                  format: double
+                  exclusiveMinimum: 0
+                  maximum: 1.7976931348623157e+308
+              required:
+                - user_id
+                - office_id
+                - date
+                - start_time
+                - end_time
+                - seat_number
+      responses:
+        "200":
+          description: POST /v1/reservations Positive response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: success
+                  data:
+                    type: object
+                    properties:
+                      reservation:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            format: int64
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          user_id:
+                            type: integer
+                            format: int64
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          office_id:
+                            type: integer
+                            format: int64
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          seat_number:
+                            type: integer
+                            format: int64
+                            minimum: -9007199254740991
+                            maximum: 9007199254740991
+                          date:
+                            type: string
+                          start_time:
+                            type: string
+                          end_time:
+                            type: string
+                          status:
+                            type: string
+                        required:
+                          - id
+                          - user_id
+                          - office_id
+                          - seat_number
+                          - date
+                          - start_time
+                          - end_time
+                          - status
+                    required:
+                      - reservation
+                required:
+                  - status
+                  - data
+        "400":
+          description: POST /v1/reservations Negative response
           content:
             application/json:
               schema:
