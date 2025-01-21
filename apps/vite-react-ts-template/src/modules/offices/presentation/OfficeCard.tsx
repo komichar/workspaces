@@ -1,13 +1,11 @@
-import { Box, Text, VStack, HStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { useSecondaryTextColor } from "theme";
-
-import { moneyVO } from "utils";
 
 import { useNavigate } from "shared/Router";
 
 import { AddToCartButton } from "modules/carts/presentation";
 
-import { Office } from "../../../../../api/office";
+import type { Office } from "../../../../../api/office";
 
 const OfficeCard = ({ city, capacity, is_peak_limited, id }: Office) => {
   const navigate = useNavigate();

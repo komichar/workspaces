@@ -1,4 +1,4 @@
-import { User } from "../../../../api/user";
+import type { User } from "../../../../api/user";
 import { createFixture } from "./createFixture";
 
 export const UserFixture = createFixture<User>({

@@ -6,8 +6,8 @@ import {
   httpServiceReservationSystem,
   ReservationSystemResponseWrapper,
 } from "utils/http";
-import { Office } from "../../../../../api/office";
-import { OfficeByIdOutput } from "../../../../../api/routing";
+import type { Office } from "../../../../../api/office";
+import type { OfficeByIdOutput } from "../../../../../api/routing";
 
 export const getOfficeQueryKey = (officeId: string) => ["office", officeId];
 

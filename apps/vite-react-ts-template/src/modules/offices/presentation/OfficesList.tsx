@@ -1,13 +1,11 @@
-import { SimpleGrid, GridItem } from "@chakra-ui/react";
+import { GridItem, SimpleGrid } from "@chakra-ui/react";
 
 import { EmptyStateResult } from "shared/Result";
 
 import { ProductAddedDialog } from "modules/carts/presentation";
 
-import { IProduct } from "../types";
-import { ProductCard } from "./ProductCard";
+import type { Office } from "../../../../../api/office";
 import { OfficeCard } from "./OfficeCard";
-import { Office } from "../../../../../api/office";
 
 interface IProps {
   offices: Office[];

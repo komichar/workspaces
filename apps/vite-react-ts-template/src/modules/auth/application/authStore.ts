@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 
 import { createStore, useStore } from "zustand";
 
-import { User } from "../../../../../api/user";
+import type { User } from "../../../../../api/user";
 import { getUser, loginUser } from "../infrastructure";
 import { ICredentials } from "../infrastructure/loginUser";
 
