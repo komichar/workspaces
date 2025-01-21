@@ -14,6 +14,7 @@ import { useNotImplementedYetToast } from "shared/Toast";
 
 import type { Reservation } from "../../../../api/reservation";
 import { useReservationCreatedNotifications } from "modules/reservations/presentation/useReservationCreatedNotifications";
+import { useReservationDeletedNotifications } from "modules/reservations/presentation/useReservationDeletedNotifications";
 
 type AvailableReservation = Omit<Reservation, "user_id"> & {
   user_id: null;
@@ -30,6 +31,8 @@ export const ReservationSeatsOverview = () => {
   const [notifyCreatedSuccess, notifyCreatedFailure] =
     useReservationCreatedNotifications();
   const reservationDeleteMutation = useReservationDeleteMutation();
+  const [notifyDeletedSuccess, notifyDeletedFailure] =
+    useReservationDeletedNotifications();
 
   const user = useAuthStore((store) => store.user);
 
@@ -91,13 +94,6 @@ export const ReservationSeatsOverview = () => {
     office.dataUpdatedAt,
   ]);
 
-  if (everyonesReservations.isInitialLoading) {
-    return <h1>loading</h1>;
-  }
-
-  // 1. fetch reservations from api
-  // 2. display reservations in a grid
-
   return (
     <Page>
       <PageHeader
@@ -125,7 +121,7 @@ export const ReservationSeatsOverview = () => {
               p={8}
               bg={
                 bookedByCurrentUser
-                  ? "green.100"
+                  ? "blue.100"
                   : available
                   ? "gray.100"
                   : "red.100"
@@ -142,16 +138,17 @@ export const ReservationSeatsOverview = () => {
                 {bookedByCurrentUser && (
                   <Button
                     colorScheme="red"
+                    variant="outline"
                     onClick={async () => {
-                      await reservationDeleteMutation.mutateAsync(
-                        reservation.id
-                      );
+                      await reservationDeleteMutation
+                        .mutateAsync(reservation.id)
+                        .then(() => notifyDeletedSuccess())
+                        .catch(() => notifyDeletedFailure());
 
                       await everyonesReservations.refetch();
                     }}
                   >
                     Cancel
-                    {/* Taken by {reservation.user_id} */}
                   </Button>
                 )}
 
@@ -170,15 +167,17 @@ export const ReservationSeatsOverview = () => {
                           start_time: "00:00:00",
                         })
                         .then(() => notifyCreatedSuccess())
-                        .catch((err) => {
-                          notifyCreatedFailure();
-                        });
+                        .catch(() => notifyCreatedFailure());
 
                       await everyonesReservations.refetch();
                     }}
                   >
                     Reserve
                   </Button>
+                )}
+
+                {!bookedByCurrentUser && !available && (
+                  <Text as="b">Reserved by user: {reservation.user_id}</Text>
                 )}
               </Box>
             </GridItem>
