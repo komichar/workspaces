@@ -11,6 +11,7 @@ import { NewOffice, Office, officeSelectSchema } from "./office";
 import { Reservation, reservationSelectSchema } from "./reservation";
 import { officesTable, reservationsTable, usersTable } from "./schema";
 import { NewUser, User, userSelectSchema } from "./user";
+import { date } from "drizzle-orm/mysql-core";
 
 const helloWorldEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
@@ -161,25 +162,30 @@ const usersListEndpoint = defaultEndpointsFactory.build({
 
 const reservationsListEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
-  input: z.object({}),
+  input: z.object({
+    user_id: z.coerce.number().positive(),
+    office_id: z.coerce.number().positive(),
+    date: z.string().length(10), // "YYYY-MM-DD"
+  }),
   output: z.object({
     reservations: reservationSelectSchema.array(),
   }),
   handler: async ({ input, options, logger }) => {
     console.log("input", input);
+
     const reservations: Reservation[] = await db
       .select()
       .from(reservationsTable)
       .where(
         and(
-          input.id ? eq(usersTable.id, input.id) : undefined,
-          input.admin != undefined
-            ? eq(usersTable.admin, input.admin)
-            : undefined
+          eq(reservationsTable.user_id, input.user_id),
+          eq(reservationsTable.office_id, input.office_id),
+          eq(reservationsTable.date, input.date)
         )
       );
 
     logger.debug("Options:", options); // middlewares provide options
+
     return { reservations };
   },
 });

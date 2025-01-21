@@ -809,6 +809,33 @@ paths:
   /v1/reservations:
     get:
       operationId: GetV1Reservations
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          description: GET /v1/reservations Parameter
+          schema:
+            type: number
+            format: double
+            exclusiveMinimum: 0
+            maximum: 1.7976931348623157e+308
+        - name: office_id
+          in: query
+          required: true
+          description: GET /v1/reservations Parameter
+          schema:
+            type: number
+            format: double
+            exclusiveMinimum: 0
+            maximum: 1.7976931348623157e+308
+        - name: date
+          in: query
+          required: true
+          description: GET /v1/reservations Parameter
+          schema:
+            type: string
+            minLength: 10
+            maxLength: 10
       responses:
         "200":
           description: GET /v1/reservations Positive response
