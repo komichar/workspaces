@@ -12,6 +12,7 @@ import { ErrorPageStrategy } from "shared/Result";
 import { useNotImplementedYetToast } from "shared/Toast";
 import { useOfficesQuery } from "modules/offices/infrastructure/officesQuery";
 import { OfficesList } from "modules/offices/presentation";
+import { withRequireAuth } from "modules/auth/application";
 
 const defaultParams: IQueryParams = { limit: 10, sort: "asc" };
 
@@ -40,6 +41,6 @@ const OfficessPage = () => {
   );
 };
 
-export const Component = OfficessPage;
+export const Component = withRequireAuth(OfficessPage, { to: "/sign-in" });
 
 export const ErrorBoundary = ErrorPageStrategy;

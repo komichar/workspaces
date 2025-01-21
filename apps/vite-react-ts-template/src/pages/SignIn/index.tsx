@@ -19,6 +19,6 @@ export const SignInPage = () => {
   );
 };
 
-export const Component = withRequirePub(SignInPage, { to: "/products" });
+export const Component = withRequirePub(SignInPage, { to: "/reservations" });
 
 export const ErrorBoundary = ErrorPageStrategy;

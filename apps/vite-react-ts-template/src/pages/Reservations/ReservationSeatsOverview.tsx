@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "shared/Router";
 import { useNotImplementedYetToast } from "shared/Toast";
 
 import type { Reservation } from "../../../../api/reservation";
+import { useReservationCreatedNotifications } from "modules/reservations/presentation/useReservationCreatedNotifications";
 
 type AvailableReservation = Omit<Reservation, "user_id"> & {
   user_id: null;
@@ -25,9 +26,10 @@ export const ReservationSeatsOverview = () => {
   const params = useParams<{ date: string }>();
   const navigate = useNavigate();
 
+  const reservationCreateMutation = useReservationCreateMutation();
+  const [notifyCreatedSuccess, notifyCreatedFailure] =
+    useReservationCreatedNotifications();
   const reservationDeleteMutation = useReservationDeleteMutation();
-
-  const reservationCreationMutation = useReservationCreateMutation();
 
   const user = useAuthStore((store) => store.user);
 
@@ -35,10 +37,10 @@ export const ReservationSeatsOverview = () => {
     throw new Error("User not found");
   }
 
-  const reservations = useReservationsQuery({
+  const everyonesReservations = useReservationsQuery({
     date: params.date as string,
     office_id: user?.office_id!,
-    user_id: user.id,
+    // user_id: user.id,
   });
 
   const office = useOfficeQuery(`${user.office_id}`);
@@ -49,6 +51,10 @@ export const ReservationSeatsOverview = () => {
     }
 
     if (!office.data) {
+      return [];
+    }
+
+    if (!everyonesReservations.data) {
       return [];
     }
 
@@ -73,7 +79,7 @@ export const ReservationSeatsOverview = () => {
     }
 
     // fill in the reservations with reservations by seat number
-    reservations.data.reservations.forEach((reservation) => {
+    everyonesReservations.data.reservations.forEach((reservation) => {
       const seat_number = reservation.seat_number - 1;
       combined[seat_number] = reservation;
     });
@@ -81,13 +87,11 @@ export const ReservationSeatsOverview = () => {
     return combined;
   }, [
     JSON.stringify(user),
-    // JSON.stringify(reservations.data),
-    // JSON.stringify(office.data),
-    reservations.dataUpdatedAt,
+    everyonesReservations.dataUpdatedAt,
     office.dataUpdatedAt,
   ]);
 
-  if (reservations.isInitialLoading) {
+  if (everyonesReservations.isInitialLoading) {
     return <h1>loading</h1>;
   }
 
@@ -112,49 +116,68 @@ export const ReservationSeatsOverview = () => {
         {mixedReservations.map((reservation) => {
           const key = `${reservation.office_id}-${reservation.date}-${reservation.seat_number}`;
           const available = !reservation.user_id;
+          const bookedByCurrentUser = user.id == reservation.user_id;
 
           return (
             <GridItem
+              borderRadius={8}
               w="100%"
               p={8}
-              bg={available ? "green.100" : "red.100"}
+              bg={
+                bookedByCurrentUser
+                  ? "green.100"
+                  : available
+                  ? "gray.100"
+                  : "red.100"
+              }
               key={key}
             >
-              <Box display="flex" justifyContent="space-between">
-                <VStack textAlign="left">
-                  <Text as="b">Seat number:</Text>
-                  <Text as="b">{reservation.seat_number}</Text>
-                </VStack>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Text as="b">Seat: {reservation.seat_number}</Text>
 
-                {available ? (
+                {bookedByCurrentUser && (
                   <Button
-                    onClick={async () => {
-                      await reservationCreationMutation.mutateAsync({
-                        user_id: user.id,
-                        office_id: user.office_id as number,
-                        date: params.date as string,
-                        end_time: "00:00:00",
-                        seat_number: reservation.seat_number,
-                        start_time: "00:00:00",
-                      });
-                      await reservations.refetch();
-                    }}
-                    rightIcon={<SettingsIcon />}
-                  >
-                    Reserve
-                  </Button>
-                ) : (
-                  <Button
+                    colorScheme="red"
                     onClick={async () => {
                       await reservationDeleteMutation.mutateAsync(
                         reservation.id
                       );
-                      await reservations.refetch();
+
+                      await everyonesReservations.refetch();
                     }}
-                    rightIcon={<SettingsIcon />}
                   >
                     Cancel
                     {/* Taken by {reservation.user_id} */}
+                  </Button>
+                )}
+
+                {available && (
+                  <Button
+                    colorScheme="teal"
+                    variant="outline"
+                    onClick={async () => {
+                      await reservationCreateMutation
+                        .mutateAsync({
+                          user_id: user.id,
+                          office_id: user.office_id as number,
+                          date: params.date as string,
+                          end_time: "00:00:00",
+                          seat_number: reservation.seat_number,
+                          start_time: "00:00:00",
+                        })
+                        .then(() => notifyCreatedSuccess())
+                        .catch((err) => {
+                          notifyCreatedFailure();
+                        });
+
+                      await everyonesReservations.refetch();
+                    }}
+                  >
+                    Reserve
                   </Button>
                 )}
               </Box>
@@ -167,7 +190,7 @@ export const ReservationSeatsOverview = () => {
         <h1>office</h1>
         <pre>{JSON.stringify(office.data, null, 2)}</pre>
         <h1>reservations</h1>
-        <pre>{JSON.stringify(reservations.data, null, 2)}</pre>
+        <pre>{JSON.stringify(everyonesReservations.data, null, 2)}</pre>
         <h1>mixedReservations</h1>
         <pre>{JSON.stringify(mixedReservations, null, 2)}</pre>
       </Box>

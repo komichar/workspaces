@@ -12,6 +12,7 @@ import { addDays, format } from "date-fns";
 import { Route, Routes } from "react-router-dom";
 import { ReservationSeatsOverview } from "./ReservationSeatsOverview";
 import { ReservationsOverviewPage } from "./ReservationsOverview";
+import { withRequireAuth } from "modules/auth/application";
 
 // Generate the next 7 days starting from today
 const generateNext7Days = () => {
@@ -46,6 +47,6 @@ const ReservationsPage = () => {
   );
 };
 
-export const Component = ReservationsPage;
+export const Component = withRequireAuth(ReservationsPage, { to: "/sign-in" });
 
 export const ErrorBoundary = ErrorPageStrategy;
