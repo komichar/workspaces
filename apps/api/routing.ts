@@ -8,7 +8,11 @@ import createHttpError from "http-errors";
 import { z } from "zod";
 import { db } from "./database";
 import { NewOffice, Office, officeSelectSchema } from "./office";
-import { Reservation, reservationSelectSchema } from "./reservation";
+import {
+  NewReservation,
+  Reservation,
+  reservationSelectSchema,
+} from "./reservation";
 import { officesTable, reservationsTable, usersTable } from "./schema";
 import { NewUser, User, userSelectSchema } from "./user";
 import { date } from "drizzle-orm/mysql-core";
@@ -160,16 +164,20 @@ const usersListEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const reservationsListOutput = z.object({
+  reservations: reservationSelectSchema.array(),
+});
+export type ReservationsListOutput = z.infer<typeof reservationsListOutput>;
+const reservationsListInput = z.object({
+  user_id: z.coerce.number().positive(),
+  office_id: z.coerce.number().positive(),
+  date: z.string().length(10),
+});
+export type ReservationsListInput = z.infer<typeof reservationsListInput>;
 const reservationsListEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
-  input: z.object({
-    user_id: z.coerce.number().positive(),
-    office_id: z.coerce.number().positive(),
-    date: z.string().length(10), // "YYYY-MM-DD"
-  }),
-  output: z.object({
-    reservations: reservationSelectSchema.array(),
-  }),
+  input: reservationsListInput,
+  output: reservationsListOutput,
   handler: async ({ input, options, logger }) => {
     console.log("input", input);
 
@@ -187,6 +195,58 @@ const reservationsListEndpoint = defaultEndpointsFactory.build({
     logger.debug("Options:", options); // middlewares provide options
 
     return { reservations };
+  },
+});
+
+const createReservationInput = z.object({
+  user_id: z.number().positive(),
+  office_id: z.number().positive(),
+  date: z.string().length(10),
+  start_time: z.string().length(8),
+  end_time: z.string().length(8),
+  seat_number: z.number().positive(),
+});
+export type CreateReservationInput = z.infer<typeof createReservationInput>;
+
+const reservationsCreateEndpoint = defaultEndpointsFactory.build({
+  method: "post", // (default) or array ["get", "post", ...]
+  input: createReservationInput,
+  output: z.object({
+    reservation: reservationSelectSchema,
+  }),
+  handler: async ({ input, options, logger }) => {
+    // find office, check seat number
+    const [office]: Office[] = await db
+      .select()
+      .from(officesTable)
+      .where(eq(officesTable.id, input.office_id))
+      .limit(1);
+
+    if (!office) {
+      throw createHttpError.NotFound();
+    }
+
+    if (input.seat_number > office.capacity!) {
+      throw createHttpError.BadRequest("Seat number is invalid");
+    }
+
+    const nu: NewReservation = {
+      user_id: input.user_id,
+      office_id: input.office_id,
+      date: input.date,
+      end_time: "18:00:00",
+      start_time: "09:00:00",
+      seat_number: input.seat_number,
+    };
+
+    const [reservation] = await db
+      .insert(reservationsTable)
+      .values(nu)
+      .returning();
+
+    logger.debug("Options:", options); // middlewares provide options
+
+    return { reservation: reservation };
   },
 });
 
@@ -215,6 +275,20 @@ const reservationByIdEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const cancelReservationByIdEndpoint = defaultEndpointsFactory.build({
+  method: "delete", // (default) or array ["get", "post", ...]
+  input: z.object({
+    id: z.coerce.number().positive(),
+  }),
+  output: z.object({}),
+  handler: async ({ input }) => {
+    const res = await db
+      .delete(reservationsTable)
+      .where(eq(reservationsTable.id, input.id));
+
+    return {};
+  },
+});
 const authLoginInput = z.object({
   email: z.string().email(),
 });
@@ -292,8 +366,14 @@ export const routing: Routing = {
     users: usersListEndpoint.nest({
       ":id": userByIdEndpoint,
     }),
-    reservations: reservationsListEndpoint.nest({
-      ":id": reservationByIdEndpoint,
+    reservations: new DependsOnMethod({
+      get: reservationsListEndpoint,
+      post: reservationsCreateEndpoint,
+    }).nest({
+      ":id": new DependsOnMethod({
+        get: reservationByIdEndpoint,
+        delete: cancelReservationByIdEndpoint,
+      }),
     }),
   },
 };

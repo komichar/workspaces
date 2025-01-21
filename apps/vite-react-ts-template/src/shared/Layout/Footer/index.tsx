@@ -27,7 +27,7 @@ export const Footer = () => {
               <Logo />
             </Box>
             <Text fontSize="sm">
-              © {new Date().getFullYear()} E-commerce Demo. All rights reserved
+              © {new Date().getFullYear()} All rights reserved
             </Text>
           </Stack>
           <Stack align="flex-start">
