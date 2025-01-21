@@ -230,6 +230,9 @@ const reservationsCreateEndpoint = defaultEndpointsFactory.build({
       throw createHttpError.BadRequest("Seat number is invalid");
     }
 
+    // TODO: calculate high demand, throw 400 if peak limited & hours dont match
+    // high demand if 75% of a day's time is already booked, capacity * 0.75 * 8h
+
     const nu: NewReservation = {
       user_id: input.user_id,
       office_id: input.office_id,
