@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
         lazy: () => import("./Products"),
       },
       {
-        path: "/reservations",
+        path: "/reservations/*",
         lazy: () => import("./Reservations"),
       },
       {
