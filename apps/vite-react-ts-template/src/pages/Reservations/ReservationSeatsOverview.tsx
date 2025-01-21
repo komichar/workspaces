@@ -104,7 +104,7 @@ export const ReservationSeatsOverview = () => {
           leftIcon={<ArrowBackIcon />}
           onClick={() => navigate("/reservations")}
         >
-          Reservations
+          Reservations list
         </Button>
       </PageHeader>
 

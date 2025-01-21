@@ -24,6 +24,9 @@ const defaultParams: IQueryParams = { limit: 10, sort: "asc" };
 
 import { addDays, format } from "date-fns";
 import { useNavigate } from "shared/Router";
+import { useReservationsQuery } from "modules/reservations/infrastructure";
+import { useAuthStore } from "modules/auth/application";
+import { OverviewListItem } from "./OverviewListItem";
 
 // Generate the next 7 days starting from today
 const generateNext7Days = () => {
@@ -55,7 +58,7 @@ export const ReservationsOverviewPage = () => {
     <Page>
       <PageHeader
         title={t("Reservations list")}
-        description={t("Make reservations")}
+        description={t("for upcoming days")}
       >
         <Button leftIcon={<SettingsIcon />} onClick={notImplemented}>
           {t("More filters")}
@@ -65,32 +68,11 @@ export const ReservationsOverviewPage = () => {
       <Box my={2}>
         <VStack spacing={4} align="stretch">
           {next7Days.map((day) => (
-            <Box p={4} bg="gray.100" key={day.date} borderRadius={8}>
-              <HStack justify={"space-between"} alignContent={"center"}>
-                <Heading as="h4" size="md">
-                  <Text color="gray.400">{day.date}</Text>
-                  <Text>{day.dayName}</Text>
-                </Heading>
-                <Stack direction="row" spacing={4}>
-                  <Button
-                    isLoading={false}
-                    colorScheme="teal"
-                    variant="solid"
-                    onClick={() => navigate(`/reservations/${day.date}`)}
-                  >
-                    Reserve
-                  </Button>
-                  <Button
-                    isLoading={false}
-                    loadingText="Submitting"
-                    colorScheme="teal"
-                    variant="outline"
-                  >
-                    Cancel
-                  </Button>
-                </Stack>
-              </HStack>
-            </Box>
+            <OverviewListItem
+              key={day.date}
+              date={day.date}
+              dayName={day.dayName}
+            />
           ))}
         </VStack>
       </Box>

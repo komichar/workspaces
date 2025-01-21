@@ -2,6 +2,9 @@ export {
   getReservationsQueryKey,
   useReservationsQuery,
   reservationsLoader,
+  getMyReservationForDayQueryKey,
+  useMyReservationsForDayQuery,
+  myreservationsForDayLoader,
 } from "./reservationsQuery";
 
 export {
