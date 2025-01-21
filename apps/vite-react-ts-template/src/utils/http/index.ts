@@ -17,7 +17,7 @@ export const httpServiceReservationSystem = new HttpService(
   new KyClient({ prefixUrl: reservationSystemApiHost, headers })
 );
 
-export type ReservationSystemResponseWrapper<T> = {
+export type APIResponseWrapper<T> = {
   status: string;
   data: T;
 };

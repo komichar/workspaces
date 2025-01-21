@@ -2,10 +2,7 @@ import { UseQueryOptions } from "@tanstack/react-query";
 
 import { buildUrl, queryClient, useQuery } from "utils";
 
-import {
-  httpServiceReservationSystem,
-  ReservationSystemResponseWrapper,
-} from "utils/http";
+import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
 import type { Office } from "../../../../../api/office";
 import type { OfficeByIdOutput } from "../../../../../api/routing";
 
@@ -15,7 +12,7 @@ export const getOfficeQuery = (officeId: string) => ({
   queryKey: getOfficeQueryKey(officeId),
   queryFn: (): Promise<Office> =>
     httpServiceReservationSystem
-      .get<ReservationSystemResponseWrapper<OfficeByIdOutput>>(
+      .get<APIResponseWrapper<OfficeByIdOutput>>(
         buildUrl(`v1/offices/${officeId}`)
       )
       .then((res) => res.data.office),

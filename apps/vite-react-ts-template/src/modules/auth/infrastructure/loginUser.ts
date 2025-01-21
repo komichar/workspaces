@@ -1,8 +1,5 @@
 import { buildUrl } from "utils";
-import {
-  httpServiceReservationSystem,
-  ReservationSystemResponseWrapper,
-} from "utils/http";
+import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
 import type {
   AuthLoginInput,
   AuthLoginOutput,
@@ -15,7 +12,8 @@ export interface ICredentials {
 }
 
 export const loginUser = (body: AuthLoginInput) => {
-  return httpServiceReservationSystem.post<
-    ReservationSystemResponseWrapper<AuthLoginOutput>
-  >(buildUrl("v1/auth/login"), body);
+  return httpServiceReservationSystem.post<APIResponseWrapper<AuthLoginOutput>>(
+    buildUrl("v1/auth/login"),
+    body
+  );
 };

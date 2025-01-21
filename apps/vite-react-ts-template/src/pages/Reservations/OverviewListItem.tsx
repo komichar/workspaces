@@ -37,8 +37,8 @@ export const OverviewListItem = ({ date, dayName }: Props) => {
         <Stack direction="row" spacing={4}>
           {reservation.data?.id && (
             <Button
-              isLoading={false}
-              loadingText="Submitting"
+              isLoading={reservationDeleteMutation.isLoading}
+              loadingText="Cancelling"
               colorScheme="red"
               variant="outline"
               onClick={async () => {

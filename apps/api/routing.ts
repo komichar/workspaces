@@ -125,6 +125,10 @@ const userByIdEndpoint = defaultEndpointsFactory.build({
   },
 });
 
+const usersListOutput = z.object({
+  users: userSelectSchema.array(),
+});
+export type UsersListOutput = z.infer<typeof usersListOutput>;
 const usersListEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
   input: z.object({
@@ -141,9 +145,7 @@ const usersListEndpoint = defaultEndpointsFactory.build({
         return undefined; // Default to undefined for invalid inputs
       }),
   }),
-  output: z.object({
-    users: userSelectSchema.array(),
-  }),
+  output: usersListOutput,
   handler: async ({ input, options, logger }) => {
     console.log("input", input);
     const users: User[] = await db

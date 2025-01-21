@@ -1,9 +1,6 @@
 import { buildUrl, queryClient, useQuery } from "utils";
 
-import {
-  httpServiceReservationSystem,
-  ReservationSystemResponseWrapper,
-} from "utils/http";
+import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
 import type {
   CreateReservationInput,
   ReservationsListInput,
@@ -17,7 +14,7 @@ const getReservationQuery = (params: ReservationsListInput) => ({
   queryKey: getReservationQueryKey(),
   queryFn: (): Promise<ReservationsListOutput> =>
     httpServiceReservationSystem
-      .get<ReservationSystemResponseWrapper<ReservationsListOutput>>(
+      .get<APIResponseWrapper<ReservationsListOutput>>(
         buildUrl<ReservationsListInput>("v1/reservation", params)
       )
       .then((res) => ({
