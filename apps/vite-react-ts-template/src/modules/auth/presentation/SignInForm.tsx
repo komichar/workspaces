@@ -13,8 +13,6 @@ import {
 } from "@chakra-ui/react";
 import { useSecondaryTextColor } from "theme";
 
-import { t } from "utils";
-
 import { TextInput } from "shared/Form";
 
 import { useAuthStore } from "../application";
@@ -38,12 +36,10 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
     <VStack align="stretch" spacing={8} w="100%" maxW="lg">
       <VStack textAlign="center">
         <Heading fontSize={{ base: "2xl", md: "4xl" }}>
-          {t("Sign in to your account")}
+          Sign in to your account
         </Heading>
         <Text fontSize={{ base: "md", md: "lg" }} color={secondaryColor}>
-          {t("to enjoy all of our cool {link} ✌️", {
-            link: <Link color={"blue.400"}>{t("features")}</Link>,
-          })}
+          to enjoy all of our cool <Link color={"blue.400"}>features</Link> ✌️
         </Text>
       </VStack>
       <Box
@@ -72,7 +68,7 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
             value={username}
             onChange={(e) => setUsername(e.currentTarget.value)}
           >
-            {t("Username")}
+            Username
           </TextInput>
           <TextInput
             id="password"
@@ -80,7 +76,7 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
             value={password}
             onChange={(e) => setPassword(e.currentTarget.value)}
           >
-            {t("Password")}
+            Password
           </TextInput>
           <VStack w="100%" spacing={10}>
             <Stack
@@ -89,11 +85,11 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
               align="start"
               justify="space-between"
             >
-              <Checkbox>{t("Remember me")}</Checkbox>
-              <Link color="blue.400">{t("Forgot password?")}</Link>
+              <Checkbox>Remember me</Checkbox>
+              <Link color="blue.400">Forgot password?</Link>
             </Stack>
             <Button type="submit" colorScheme="blue" w="100%">
-              {t("Sign in")}
+              Sign in
             </Button>
           </VStack>
         </VStack>
