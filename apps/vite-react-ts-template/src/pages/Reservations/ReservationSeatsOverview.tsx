@@ -1,4 +1,4 @@
-import { ArrowBackIcon, SettingsIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Box, Button, Grid, GridItem, Text, VStack } from "@chakra-ui/react";
 import { useAuthStore } from "modules/auth/application";
 import { useOfficeQuery } from "modules/offices/infrastructure";
@@ -12,9 +12,9 @@ import { Page, PageHeader } from "shared/Layout";
 import { useNavigate, useParams } from "shared/Router";
 import { useNotImplementedYetToast } from "shared/Toast";
 
-import type { Reservation } from "../../../../api/reservation";
 import { useReservationCreatedNotifications } from "modules/reservations/presentation/useReservationCreatedNotifications";
 import { useReservationDeletedNotifications } from "modules/reservations/presentation/useReservationDeletedNotifications";
+import type { Reservation } from "../../../../api/reservation";
 
 type AvailableReservation = Omit<Reservation, "user_id"> & {
   user_id: null;
@@ -186,15 +186,6 @@ export const ReservationSeatsOverview = () => {
           );
         })}
       </Grid>
-
-      <Box py={4}>
-        <h1>office</h1>
-        <pre>{JSON.stringify(office.data, null, 2)}</pre>
-        <h1>reservations</h1>
-        <pre>{JSON.stringify(everyonesReservations.data, null, 2)}</pre>
-        <h1>mixedReservations</h1>
-        <pre>{JSON.stringify(mixedReservations, null, 2)}</pre>
-      </Box>
 
       <Box my={2}>
         <VStack spacing={4} align="stretch"></VStack>

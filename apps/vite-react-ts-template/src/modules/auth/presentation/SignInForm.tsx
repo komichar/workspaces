@@ -1,25 +1,24 @@
 import { useState } from "react";
 
 import {
+  Badge,
   Box,
-  Checkbox,
-  Stack,
-  Link,
   Button,
   Heading,
   Text,
+  UnorderedList,
+  useClipboard,
   useColorModeValue,
   VStack,
-  ListItem,
-  UnorderedList,
 } from "@chakra-ui/react";
 import { useSecondaryTextColor } from "theme";
 
 import { TextInput } from "shared/Form";
 
+import type { User } from "../../../../../api/user";
 import { useAuthStore } from "../application";
-import { useSignInNotifications } from "./useSignInNotifications";
 import { useUsersQuery } from "../infrastructure";
+import { useSignInNotifications } from "./useSignInNotifications";
 
 interface IProps {
   initialUsername?: string;
@@ -27,8 +26,6 @@ interface IProps {
 }
 
 export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
-  const secondaryColor = useSecondaryTextColor();
-
   const [username, setUsername] = useState(initialUsername);
   const [password, setPassword] = useState(initialPassword);
 
@@ -97,9 +94,7 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
           {users.data && (
             <UnorderedList>
               {users.data.map((user) => (
-                <ListItem key={user.id}>
-                  <Text color={secondaryColor}>{user.email}</Text>
-                </ListItem>
+                <ExistingUser key={user.id} user={user}></ExistingUser>
               ))}
             </UnorderedList>
           )}
@@ -108,3 +103,30 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
     </>
   );
 };
+
+type Props = {
+  user: User;
+};
+
+function ExistingUser({ user }: Props) {
+  const secondaryColor = useSecondaryTextColor();
+  const { onCopy, hasCopied } = useClipboard(user.email);
+
+  return (
+    <Box display="flex" py={2} alignItems="center">
+      <Button mr={2} size="xs" onClick={onCopy}>
+        {hasCopied ? "Copied!" : "Copy"}
+      </Button>
+      <Text mr={2} color={secondaryColor}>
+        {user.email}{" "}
+      </Text>
+      <Box display="inline-block">
+        {user.admin ? (
+          <Badge colorScheme="green">Admin</Badge>
+        ) : (
+          <Badge>Regular</Badge>
+        )}
+      </Box>
+    </Box>
+  );
+}

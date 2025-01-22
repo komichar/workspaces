@@ -9,7 +9,7 @@ export const Logo = () => {
     <HStack>
       <ArrowRightIcon color={color} />
       <Text color={color} fontSize="lg" fontWeight="extrabold" m={0}>
-        Rivian Automotive, Inc.
+        Car Company, Inc.
       </Text>
     </HStack>
   );
