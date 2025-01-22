@@ -248,14 +248,14 @@ paths:
                     status: error
                     error:
                       message: Sample error message
-  /v1/offices/{office_id}/days/{date}/availability:
+  /v1/offices/{id}/days/{date}/availability:
     get:
-      operationId: GetV1OfficesOfficeIdDaysDateAvailability
+      operationId: GetV1OfficesIdDaysDateAvailability
       parameters:
-        - name: office_id
+        - name: id
           in: path
           required: true
-          description: GET /v1/offices/:office_id/days/:date/availability Parameter
+          description: GET /v1/offices/:id/days/:date/availability Parameter
           schema:
             type: number
             format: double
@@ -264,7 +264,7 @@ paths:
         - name: date
           in: path
           required: true
-          description: GET /v1/offices/:office_id/days/:date/availability Parameter
+          description: GET /v1/offices/:id/days/:date/availability Parameter
           schema:
             type: string
             minLength: 10
@@ -273,7 +273,7 @@ paths:
         - HTTP_1: []
       responses:
         "200":
-          description: GET /v1/offices/:office_id/days/:date/availability Positive response
+          description: GET /v1/offices/:id/days/:date/availability Positive response
           content:
             application/json:
               schema:
@@ -391,7 +391,7 @@ paths:
                   - status
                   - data
         "400":
-          description: GET /v1/offices/:office_id/days/:date/availability Negative response
+          description: GET /v1/offices/:id/days/:date/availability Negative response
           content:
             application/json:
               schema:
@@ -416,14 +416,14 @@ paths:
                     status: error
                     error:
                       message: Sample error message
-  /v1/offices/{office_id}:
+  /v1/offices/{id}:
     get:
-      operationId: GetV1OfficesOfficeId
+      operationId: GetV1OfficesId
       parameters:
         - name: id
-          in: query
+          in: path
           required: true
-          description: GET /v1/offices/:office_id Parameter
+          description: GET /v1/offices/:id Parameter
           schema:
             type: number
             format: double
@@ -431,7 +431,7 @@ paths:
             maximum: 1.7976931348623157e+308
       responses:
         "200":
-          description: GET /v1/offices/:office_id Positive response
+          description: GET /v1/offices/:id Positive response
           content:
             application/json:
               schema:
@@ -471,7 +471,7 @@ paths:
                   - status
                   - data
         "400":
-          description: GET /v1/offices/:office_id Negative response
+          description: GET /v1/offices/:id Negative response
           content:
             application/json:
               schema:
