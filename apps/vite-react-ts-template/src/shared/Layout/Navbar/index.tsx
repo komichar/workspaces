@@ -115,7 +115,10 @@ const SignUpButton = () => {
 const LogoutButton = () => {
   const navigate = useNavigate();
 
-  const isAuthenticated = useAuthStore((store) => store.isAuthenticated);
+  const { isAuthenticated, email } = useAuthStore((store) => ({
+    isAuthenticated: store.isAuthenticated,
+    email: store.user?.email,
+  }));
   const logout = useAuthStore((store) => store.logout);
 
   if (!isAuthenticated) {
@@ -128,7 +131,7 @@ const LogoutButton = () => {
       variant="link"
       onClick={() => logout().then(() => navigate("/"))}
     >
-      Logout
+      Logout ({email})
     </Button>
   );
 };
