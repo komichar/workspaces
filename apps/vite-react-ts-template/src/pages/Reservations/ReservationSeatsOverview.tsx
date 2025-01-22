@@ -100,7 +100,7 @@ export const ReservationSeatsOverview = () => {
         title={`Reservations for ${params.date}`}
         description={
           office.data
-            ? `You work at ${office.data.city} office (id: ${office.data.id}):`
+            ? `You work at ${office.data.city} office (id: ${office.data.id})`
             : `You work at...`
         }
       >
@@ -111,6 +111,15 @@ export const ReservationSeatsOverview = () => {
           Reservations list
         </Button>
       </PageHeader>
+
+      {everyonesReservations.data && (
+        <>
+          <Box>Current availability: {}</Box>
+          <pre>
+            {JSON.stringify(everyonesReservations.data.capacity, null, 2)}
+          </pre>
+        </>
+      )}
 
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         {mixedReservations.map((reservation) => {

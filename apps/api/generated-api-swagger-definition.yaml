@@ -928,8 +928,43 @@ paths:
                             - start_time
                             - end_time
                             - status
+                      capacity:
+                        type: object
+                        properties:
+                          office_id:
+                            type: number
+                            format: double
+                            exclusiveMinimum: 0
+                            maximum: 1.7976931348623157e+308
+                          total_capacity_hours:
+                            type: integer
+                            format: int64
+                            exclusiveMinimum: 0
+                            maximum: 9007199254740991
+                          high_demand:
+                            type: boolean
+                          booked_hours:
+                            type: integer
+                            format: int64
+                            minimum: 0
+                            maximum: 9007199254740991
+                          filled_ratio:
+                            type: number
+                            format: double
+                            minimum: 0
+                            maximum: 1
+                          filled_percentage:
+                            type: string
+                        required:
+                          - office_id
+                          - total_capacity_hours
+                          - high_demand
+                          - booked_hours
+                          - filled_ratio
+                          - filled_percentage
                     required:
                       - reservations
+                      - capacity
                 required:
                   - status
                   - data

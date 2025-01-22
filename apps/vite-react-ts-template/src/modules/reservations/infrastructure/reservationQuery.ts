@@ -24,6 +24,7 @@ const getReservationQuery = (params: ReservationsListInput) => ({
       )
       .then((res) => ({
         reservations: res.data.reservations,
+        capacity: res.data.capacity,
       })),
 });
 

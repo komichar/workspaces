@@ -11,10 +11,11 @@ import {
   reservationSelectSchema,
 } from "./reservation.js";
 import { officesTable, reservationsTable } from "./schema.js";
-import { calculateTimeCapacity } from "./time-capacity.service.js";
+import { calculateTimeCapacity, capacitySchema } from "./capacity.service.js";
 
 export const reservationsListOutput = z.object({
   reservations: reservationSelectSchema.array(),
+  capacity: capacitySchema,
 });
 export type ReservationsListOutput = z.infer<typeof reservationsListOutput>;
 const reservationsListInput = z.object({
@@ -30,6 +31,12 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
   handler: async ({ input, options, logger }) => {
     console.log("input", input);
 
+    const [office]: Office[] = await db
+      .select()
+      .from(officesTable)
+      .where(eq(officesTable.id, input.office_id))
+      .limit(1);
+
     const reservations: Reservation[] = await db
       .select()
       .from(reservationsTable)
@@ -43,7 +50,9 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
         )
       );
 
-    return reservationsListOutput.parse({ reservations });
+    const capacity = await calculateTimeCapacity(office, input.date);
+
+    return reservationsListOutput.parse({ reservations, capacity });
   },
 });
 

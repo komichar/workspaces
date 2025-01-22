@@ -53,16 +53,15 @@ export const OverviewListItem = ({ date, dayName }: Props) => {
               Cancel seat {reservation.data.seat_number}
             </Button>
           )}
-          {!reservation.data && (
-            <Button
-              isLoading={false}
-              colorScheme="teal"
-              variant="solid"
-              onClick={() => navigate(`/reservations/${date}`)}
-            >
-              Select a seat
-            </Button>
-          )}
+
+          <Button
+            isLoading={false}
+            colorScheme="teal"
+            variant="solid"
+            onClick={() => navigate(`/reservations/${date}`)}
+          >
+            View seats
+          </Button>
         </Stack>
       </HStack>
     </Box>

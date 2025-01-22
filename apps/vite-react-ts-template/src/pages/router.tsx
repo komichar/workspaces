@@ -29,11 +29,6 @@ export const router = createBrowserRouter([
         lazy: () => import("./SignIn"),
       },
       {
-        path: "/products",
-        loader: productsPageLoader,
-        lazy: () => import("./Products"),
-      },
-      {
         path: "/reservations/*",
         lazy: () => import("./Reservations"),
       },
@@ -46,16 +41,6 @@ export const router = createBrowserRouter([
         path: "/offices/:officeId",
         loader: officePageLoader,
         lazy: () => import("./Office"),
-      },
-      {
-        path: "/products/:productId",
-        loader: productPageLoader,
-        lazy: () => import("./Product"),
-      },
-      {
-        path: "/cart/:cartId",
-        loader: cartPageLoader,
-        lazy: () => import("./Cart"),
       },
     ],
   },
