@@ -98,9 +98,7 @@ paths:
                             minimum: -9007199254740991
                             maximum: 9007199254740991
                           office_id:
-                            type:
-                              - integer
-                              - "null"
+                            type: integer
                             format: int64
                             minimum: -9007199254740991
                             maximum: 9007199254740991
@@ -201,9 +199,7 @@ paths:
                             minimum: -9007199254740991
                             maximum: 9007199254740991
                           office_id:
-                            type:
-                              - integer
-                              - "null"
+                            type: integer
                             format: int64
                             minimum: -9007199254740991
                             maximum: 9007199254740991
@@ -540,9 +536,7 @@ paths:
                             minimum: -9007199254740991
                             maximum: 9007199254740991
                           office_id:
-                            type:
-                              - integer
-                              - "null"
+                            type: integer
                             format: int64
                             minimum: -9007199254740991
                             maximum: 9007199254740991
@@ -647,9 +641,7 @@ paths:
                               minimum: -9007199254740991
                               maximum: 9007199254740991
                             office_id:
-                              type:
-                                - integer
-                                - "null"
+                              type: integer
                               format: int64
                               minimum: -9007199254740991
                               maximum: 9007199254740991
