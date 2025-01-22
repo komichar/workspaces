@@ -10,6 +10,7 @@ import {
   useColorModeValue,
   createIcon,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { useBrandColor, useSecondaryTextColor } from "theme";
 
 interface IProps {
@@ -19,6 +20,8 @@ interface IProps {
 const HeroSection = ({ productNumber }: IProps) => {
   const brandColor = useBrandColor();
   const textColor = useSecondaryTextColor();
+
+  const navigate = useNavigate();
 
   return (
     <Container maxW="3xl">
@@ -33,28 +36,23 @@ const HeroSection = ({ productNumber }: IProps) => {
           fontSize={{ base: "3xl", sm: "4xl", md: "6xl", lg: "7xl" }}
           lineHeight={"110%"}
         >
-          Make money from <br />
-          <Text as="span" color={brandColor}>
-            your products
-          </Text>
+          Head over to login <br />
         </Heading>
-        <Text fontSize={{ base: "md", md: "lg", lg: "xl" }} color={textColor}>
-          We are a brand new e-commerce service with a lot of potential to
-          growth. At this point, we have about {productNumber} products in our
-          store and plenty of trusted clients that will soon extend their offer.
-        </Text>
         <VStack
           spacing={3}
           align="center"
           alignSelf="center"
           position="relative"
         >
-          <Button colorScheme="orange" rounded="full" px={6}>
-            Get Started
+          <Button
+            colorScheme="orange"
+            rounded="full"
+            px={6}
+            onClick={() => navigate("/sign-in")}
+          >
+            Go to Sign in
           </Button>
-          <Button variant="link" colorScheme="blue" size={"sm"}>
-            Learn more
-          </Button>
+
           <Box>
             <Icon
               as={Arrow}
@@ -64,15 +62,6 @@ const HeroSection = ({ productNumber }: IProps) => {
               right={-71}
               top="10px"
             />
-            <Text
-              fontSize="md"
-              position="absolute"
-              right="-105px"
-              top="-25px"
-              transform="rotate(10deg)"
-            >
-              Starting at $79/mo
-            </Text>
           </Box>
         </VStack>
       </Stack>

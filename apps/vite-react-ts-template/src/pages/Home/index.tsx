@@ -21,8 +21,6 @@ const HomePage = ({ fallbackProductsNumber }: IProps) => {
       <HeroSection
         productNumber={fallbackProductsNumber ?? data?.meta.total ?? 0}
       />
-      <FeatureSection />
-      <PricingSection />
     </Page>
   );
 };

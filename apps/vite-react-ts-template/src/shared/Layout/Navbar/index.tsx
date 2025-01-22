@@ -67,7 +67,6 @@ export const Navbar = () => {
         </Flex>
         <HStack direction={"row"} spacing={4}>
           <SignInButton />
-          <SignUpButton />
           <LogoutButton />
           <ToggleModeButton />
         </HStack>
