@@ -22,7 +22,7 @@ import { PageHeader } from "shared/Layout";
 
 import { AddToCartButton } from "modules/carts/presentation";
 
-import type { Office } from "../../../../../api/office";
+import type { Office } from "../../../../../api/src/office";
 
 interface IProps {
   office: Office;

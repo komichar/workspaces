@@ -1,7 +1,7 @@
 import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
 
-import type { UsersListOutput } from "../../../../../api/users.routing";
-import type { User } from "../../../../../api/user";
+import type { UsersListOutput } from "../../../../../api/src/users.routing";
+import type { User } from "../../../../../api/src/user";
 import { queryClient, useQuery } from "utils";
 
 export const getUsersQueryKey = () => ["users"];

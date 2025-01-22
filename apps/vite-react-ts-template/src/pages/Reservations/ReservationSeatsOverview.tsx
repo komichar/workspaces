@@ -14,7 +14,7 @@ import { useNotImplementedYetToast } from "shared/Toast";
 
 import { useReservationCreatedNotifications } from "modules/reservations/presentation/useReservationCreatedNotifications";
 import { useReservationDeletedNotifications } from "modules/reservations/presentation/useReservationDeletedNotifications";
-import type { Reservation } from "../../../../api/reservation";
+import type { Reservation } from "../../../../api/src/reservation";
 
 type AvailableReservation = Omit<Reservation, "user_id"> & {
   user_id: null;

@@ -1,6 +1,6 @@
 import { createServer } from "express-zod-api";
-import { config } from "./config";
-import { routing } from "./routing";
+import { config } from "./config.js";
+import { routing } from "./routing.js";
 
 console.log("Starting server...");
 

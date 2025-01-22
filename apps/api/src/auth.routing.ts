@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { and, eq } from "drizzle-orm";
-import { NewUser, User, userSelectSchema } from "./user";
+import { NewUser, User, userSelectSchema } from "./user.js";
 import { defaultEndpointsFactory } from "express-zod-api";
-import { usersTable } from "./schema";
+import { usersTable } from "./schema.js";
 import createHttpError from "http-errors";
-import { db } from "./database";
+import { db } from "./database.js";
 
 const authLoginInput = z.object({
   email: z.string().email(),
@@ -31,7 +31,7 @@ export const authLoginEndpoint = defaultEndpointsFactory.build({
       throw createHttpError.NotFound();
     }
 
-    return { user, token: "mock-token-here" };
+    return authLoginOutput.parse({ user, token: "mock" });
   },
 });
 
@@ -57,6 +57,6 @@ export const authRegisterEndpoint = defaultEndpointsFactory.build({
       .values(newUser)
       .returning();
 
-    return { user: registered, token: "mock-token-here" };
+    return { user: userSelectSchema.parse(registered) };
   },
 });

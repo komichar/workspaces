@@ -1,9 +1,9 @@
 import { z } from "zod";
 import createHttpError from "http-errors";
 import { defaultEndpointsFactory, Middleware } from "express-zod-api";
-import { db } from "./database";
-import { usersTable } from "./schema";
-import { User } from "./user";
+import { db } from "./database.js";
+import { usersTable } from "./schema.js";
+import { User } from "./user.js";
 import { eq } from "drizzle-orm";
 
 export const authMiddleware = new Middleware({

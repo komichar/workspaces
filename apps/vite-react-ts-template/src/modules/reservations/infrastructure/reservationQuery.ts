@@ -5,7 +5,7 @@ import type {
   CreateReservationInput,
   ReservationsListInput,
   ReservationsListOutput,
-} from "../../../../../api/reservations.routing";
+} from "../../../../../api/src/reservations.routing";
 import { useMutation } from "@tanstack/react-query";
 
 export const getReservationQueryKey = () => ["reservation"]; // TODO: improve key with other params

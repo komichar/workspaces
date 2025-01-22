@@ -1,13 +1,12 @@
-import { createConfig, Documentation } from "express-zod-api";
+import { createConfig } from "express-zod-api";
+import { readFile } from "fs/promises";
 import ui from "swagger-ui-express";
 import yaml from "yaml";
-import fs from "fs";
-import { readFile } from "fs/promises";
 
 export const config = createConfig({
   beforeRouting: async ({ app }) => {
     const documentation = yaml.parse(
-      await readFile("example.documentation.yaml", "utf-8")
+      await readFile("./generated-api-swagger-definition.yaml", "utf-8")
     );
     app.use("/docs", ui.serve, ui.setup(documentation));
   },

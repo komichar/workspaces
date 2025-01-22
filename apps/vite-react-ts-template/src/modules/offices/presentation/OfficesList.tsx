@@ -4,7 +4,7 @@ import { EmptyStateResult } from "shared/Result";
 
 import { ProductAddedDialog } from "modules/carts/presentation";
 
-import type { Office } from "../../../../../api/office";
+import type { Office } from "../../../../../api/src/office";
 import { OfficeCard } from "./OfficeCard";
 
 interface IProps {

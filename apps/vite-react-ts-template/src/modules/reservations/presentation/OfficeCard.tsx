@@ -5,7 +5,7 @@ import { useNavigate } from "shared/Router";
 
 import { AddToCartButton } from "modules/carts/presentation";
 
-import type { Office } from "../../../../../api/office";
+import type { Office } from "../../../../../api/src/office";
 
 const OfficeCard = ({ city, capacity, is_peak_limited, id }: Office) => {
   const navigate = useNavigate();

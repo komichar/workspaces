@@ -7,8 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "studio": "drizzle-kit studio",
-    "docs:gen": "tsx generate-documentation.ts",
-    "dev": "tsx watch main.ts"
+    "build": "tsc -p ./tsconfig.json",
+    "docs:gen": "tsx ./generate-documentation.script.ts",
+    "dev": "tsx watch ./src/main.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +33,6 @@
     "@types/swagger-ui-express": "^4.1.7",
     "drizzle-kit": "^0.30.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.2"
   }
 }

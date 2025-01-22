@@ -2,7 +2,9 @@ import { int, sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const usersTable = sqliteTable("users", {
   id: int().primaryKey({ autoIncrement: true }),
-  office_id: int("office_id").references(() => officesTable.id),
+  office_id: int("office_id")
+    .references(() => officesTable.id)
+    .notNull(),
   name: text().notNull(),
   admin: integer({ mode: "boolean" }).default(false),
   email: text().notNull().unique(),
@@ -12,7 +14,7 @@ export const officesTable = sqliteTable("offices", {
   id: int().primaryKey({ autoIncrement: true }),
   city: text().notNull(),
   capacity: integer().notNull(),
-  is_peak_limited: integer({ mode: "boolean" }).notNull().default(false),
+  is_peak_limited: integer({ mode: "boolean" }).notNull(),
 });
 
 export const reservationsTable = sqliteTable("reservations", {

@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { and, eq } from "drizzle-orm";
-import { User, userSelectSchema } from "./user";
+import { User, userSelectSchema } from "./user.js";
 import { defaultEndpointsFactory } from "express-zod-api";
-import { usersTable } from "./schema";
-import { db } from "./database";
+import { usersTable } from "./schema.js";
+import { db } from "./database.js";
 
 export const usersListOutput = z.object({
   users: userSelectSchema.array(),
@@ -41,7 +41,7 @@ export const usersListEndpoint = defaultEndpointsFactory.build({
         )
       );
 
-    return { users };
+    return usersListOutput.parse({ users });
   },
 });
 
@@ -62,6 +62,12 @@ export const userByIdEndpoint = defaultEndpointsFactory.build({
       .where(eq(usersTable.id, input.id))
       .limit(1);
 
-    return { user };
+    const [another] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, input.id))
+      .limit(1);
+
+    return { user: userSelectSchema.parse(user) };
   },
 });

@@ -3,8 +3,8 @@ import { UseQueryOptions } from "@tanstack/react-query";
 import { buildUrl, queryClient, useQuery } from "utils";
 
 import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
-import type { Office } from "../../../../../api/office";
-import type { OfficeByIdOutput } from "../../../../../api/offices.routing";
+import type { Office } from "../../../../../api/src/office";
+import type { OfficeByIdOutput } from "../../../../../api/src/offices.routing";
 
 export const getOfficeQueryKey = (officeId: string) => ["office", officeId];
 

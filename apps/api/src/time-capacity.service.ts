@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
-import { db } from "./database";
-import { Office } from "./office";
-import { reservationsTable } from "./schema";
+import { db } from "./database.js";
+import { Office } from "./office.js";
+import { reservationsTable } from "./schema.js";
 
 type TimeCapacity = {
   ofice_id: number;

@@ -31,7 +31,7 @@ importers:
         version: 5.0.1
       express-zod-api:
         specifier: ^21.11.1
-        version: 21.11.1(@types/express@5.0.0)(@types/http-errors@2.0.4)(@types/node@22.10.7)(express@5.0.1)(http-errors@2.0.0)(typescript@5.7.3)(zod@3.24.1)
+        version: 21.11.1(@types/express@5.0.0)(@types/http-errors@2.0.4)(@types/node@22.10.7)(express@5.0.1)(http-errors@2.0.0)(typescript@5.7.2)(zod@3.24.1)
       http-errors:
         specifier: ^2.0.0
         version: 2.0.0
@@ -64,8 +64,8 @@ importers:
         specifier: ^4.19.2
         version: 4.19.2
       typescript:
-        specifier: ^5.7.3
-        version: 5.7.3
+        specifier: ^5.7.2
+        version: 5.7.2
 
   apps/vite-react-ts-template:
     dependencies:
@@ -5860,6 +5860,11 @@ packages:
   typedarray-to-buffer@3.1.5:
     resolution: {integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==}
 
+  typescript@5.7.2:
+    resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typescript@5.7.3:
     resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
     engines: {node: '>=14.17'}
@@ -9655,7 +9660,7 @@ snapshots:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
 
-  express-zod-api@21.11.1(@types/express@5.0.0)(@types/http-errors@2.0.4)(@types/node@22.10.7)(express@5.0.1)(http-errors@2.0.0)(typescript@5.7.3)(zod@3.24.1):
+  express-zod-api@21.11.1(@types/express@5.0.0)(@types/http-errors@2.0.4)(@types/node@22.10.7)(express@5.0.1)(http-errors@2.0.0)(typescript@5.7.2)(zod@3.24.1):
     dependencies:
       ansis: 3.9.0
       express: 5.0.1
@@ -9663,7 +9668,7 @@ snapshots:
       node-mocks-http: 1.16.2(@types/express@5.0.0)(@types/node@22.10.7)
       openapi3-ts: 4.4.0
       ramda: 0.30.1
-      typescript: 5.7.3
+      typescript: 5.7.2
       zod: 3.24.1
     optionalDependencies:
       '@types/express': 5.0.0
@@ -12545,6 +12550,8 @@ snapshots:
   typedarray-to-buffer@3.1.5:
     dependencies:
       is-typedarray: 1.0.0
+
+  typescript@5.7.2: {}
 
   typescript@5.7.3: {}
 

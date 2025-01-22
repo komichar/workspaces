@@ -4,19 +4,19 @@ import {
   Routing,
 } from "express-zod-api";
 import { z } from "zod";
-import { authLoginEndpoint, authRegisterEndpoint } from "./auth.routing";
+import { authLoginEndpoint, authRegisterEndpoint } from "./auth.routing.js";
 import {
   officeByIdEndpoint,
   officeCreateEndpoint,
   officesListEndpoint,
-} from "./offices.routing";
+} from "./offices.routing.js";
 import {
   cancelReservationByIdEndpoint,
   reservationByIdEndpoint,
   reservationsCreateEndpoint,
   reservationsListEndpoint,
-} from "./reservations.routing";
-import { userByIdEndpoint, usersListEndpoint } from "./users.routing";
+} from "./reservations.routing.js";
+import { userByIdEndpoint, usersListEndpoint } from "./users.routing.js";
 
 const helloWorldEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]

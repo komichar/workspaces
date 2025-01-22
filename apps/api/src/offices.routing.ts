@@ -1,10 +1,10 @@
-import { z } from "zod";
-import { and, eq } from "drizzle-orm";
-import { NewOffice, Office, officeSelectSchema } from "./office";
+import { eq } from "drizzle-orm";
 import { defaultEndpointsFactory } from "express-zod-api";
-import { db } from "./database";
-import { officesTable } from "./schema";
-import { adminEndpointFactory } from "./auth.middleware";
+import { z } from "zod";
+import { adminEndpointFactory } from "./auth.middleware.js";
+import { db } from "./database.js";
+import { NewOffice, Office, officeSelectSchema } from "./office.js";
+import { officesTable } from "./schema.js";
 
 export const officeListOutput = z.object({
   offices: officeSelectSchema.array(),
@@ -20,7 +20,7 @@ export const officesListEndpoint = defaultEndpointsFactory.build({
   handler: async ({ input: { name }, options, logger }) => {
     const offices: Office[] = await db.select().from(officesTable);
 
-    return { offices };
+    return officeListOutput.parse({ offices });
   },
 });
 
@@ -42,7 +42,7 @@ export const officeByIdEndpoint = defaultEndpointsFactory.build({
       .where(eq(officesTable.id, input.id))
       .limit(1);
 
-    return { office };
+    return officeByIdOutput.parse({ office });
   },
 });
 
@@ -68,6 +68,6 @@ export const officeCreateEndpoint = adminEndpointFactory.build({
       .values(newOffice)
       .returning();
 
-    return { office: createdOffice };
+    return { office: officeSelectSchema.parse(createdOffice) };
   },
 });

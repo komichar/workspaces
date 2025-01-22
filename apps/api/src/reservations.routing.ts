@@ -1,17 +1,17 @@
+import { and, eq } from "drizzle-orm";
+import { defaultEndpointsFactory } from "express-zod-api";
+import createHttpError from "http-errors";
 import { z } from "zod";
-import { and, eq, sql } from "drizzle-orm";
+import { authorizedndpointFactory } from "./auth.middleware.js";
+import { db } from "./database.js";
+import { Office } from "./office.js";
 import {
   NewReservation,
   Reservation,
   reservationSelectSchema,
-} from "./reservation";
-import { defaultEndpointsFactory } from "express-zod-api";
-import { db } from "./database";
-import { officesTable, reservationsTable } from "./schema";
-import createHttpError from "http-errors";
-import { Office } from "./office";
-import { authorizedndpointFactory } from "./auth.middleware";
-import { calculateTimeCapacity } from "./time-capacity.service";
+} from "./reservation.js";
+import { officesTable, reservationsTable } from "./schema.js";
+import { calculateTimeCapacity } from "./time-capacity.service.js";
 
 export const reservationsListOutput = z.object({
   reservations: reservationSelectSchema.array(),
@@ -43,7 +43,7 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
         )
       );
 
-    return { reservations };
+    return reservationsListOutput.parse({ reservations });
   },
 });
 
@@ -120,7 +120,7 @@ export const reservationsCreateEndpoint = authorizedndpointFactory.build({
     const capacityAfter = await calculateTimeCapacity(office, input.date);
     console.log("time capacity after", capacityAfter);
 
-    return { reservation: createdReservation };
+    return { reservation: reservationSelectSchema.parse(createdReservation) };
   },
 });
 
@@ -143,7 +143,7 @@ export const reservationByIdEndpoint = defaultEndpointsFactory.build({
       throw createHttpError.NotFound();
     }
 
-    return { reservation };
+    return { reservation: reservationSelectSchema.parse(reservation) };
   },
 });
 

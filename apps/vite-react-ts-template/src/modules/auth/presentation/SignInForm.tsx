@@ -15,7 +15,7 @@ import { useSecondaryTextColor } from "theme";
 
 import { TextInput } from "shared/Form";
 
-import type { User } from "../../../../../api/user";
+import type { User } from "../../../../../api/src/user";
 import { useAuthStore } from "../application";
 import { useUsersQuery } from "../infrastructure";
 import { useSignInNotifications } from "./useSignInNotifications";

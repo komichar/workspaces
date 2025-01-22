@@ -1,10 +1,10 @@
 import { writeFile } from "node:fs/promises";
-import { config } from "./config";
+import { config } from "./src/config.js";
 import { Documentation } from "express-zod-api";
-import { routing } from "./routing";
+import { routing } from "./src/routing.js";
 
 await writeFile(
-  "example.documentation.yaml",
+  "generated-api-swagger-definition.yaml",
   new Documentation({
     routing,
     config,
