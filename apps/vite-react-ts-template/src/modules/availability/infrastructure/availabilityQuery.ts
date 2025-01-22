@@ -1,9 +1,9 @@
+import { buildUrl, queryClient, useQuery } from "utils";
 import { APIResponseWrapper, httpServiceReservationSystem } from "utils/http";
 import {
   GetOfficeDayAvailabilityInput,
   GetOfficeDayAvailabilityOutput,
 } from "../../../../../api/src/offices-days-availability.routing";
-import { buildUrl, queryClient, useQuery } from "utils";
 
 export const getAvailabilityQueryKey = (
   params: GetOfficeDayAvailabilityInput
@@ -36,7 +36,6 @@ export const useAvailabilityQuery = (
   });
 };
 
-// loader
 export const availabilityLoader = async (
   email: string,
   params: GetOfficeDayAvailabilityInput

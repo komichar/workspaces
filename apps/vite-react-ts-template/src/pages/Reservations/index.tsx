@@ -14,12 +14,6 @@ import { ReservationSeatsOverview } from "./ReservationSeatsOverview";
 import { ReservationsOverviewPage } from "./ReservationsOverview";
 import { withRequireAuth } from "modules/auth/application";
 
-// Generate the next 7 days starting from today
-const generateNext7Days = () => {
-  const today = new Date();
-  return Array.from({ length: 7 }, (_, i) => addDays(today, i));
-};
-
 const generateNext7DaysWithNames = () => {
   const today = new Date();
   return Array.from({ length: 7 }, (_, i) => {
