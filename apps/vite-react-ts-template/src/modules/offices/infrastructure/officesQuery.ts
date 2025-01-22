@@ -1,7 +1,7 @@
 import { buildUrl, queryClient, useQuery } from "utils";
 
 import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
-import type { OfficeListOutput } from "../../../../../api/routing";
+import type { OfficeListOutput } from "../../../../../api/offices.routing";
 
 export const getOfficesQueryKey = () => ["offices"];
 

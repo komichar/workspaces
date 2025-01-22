@@ -1,15 +1,6 @@
 import { useMemo, useState } from "react";
 
-import { SettingsIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
-  Heading,
-  HStack,
-  Stack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 
 import { IQueryParams } from "types";
 
@@ -24,8 +15,6 @@ const defaultParams: IQueryParams = { limit: 10, sort: "asc" };
 
 import { addDays, format } from "date-fns";
 import { useNavigate } from "shared/Router";
-import { useReservationsQuery } from "modules/reservations/infrastructure";
-import { useAuthStore } from "modules/auth/application";
 import { OverviewListItem } from "./OverviewListItem";
 
 // Generate the next 7 days starting from today
@@ -59,11 +48,7 @@ export const ReservationsOverviewPage = () => {
       <PageHeader
         title={t("Reservations list")}
         description={t("for upcoming days")}
-      >
-        <Button leftIcon={<SettingsIcon />} onClick={notImplemented}>
-          {t("More filters")}
-        </Button>
-      </PageHeader>
+      ></PageHeader>
 
       <Box my={2}>
         <VStack spacing={4} align="stretch">

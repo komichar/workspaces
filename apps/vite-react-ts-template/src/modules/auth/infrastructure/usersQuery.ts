@@ -1,6 +1,6 @@
 import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
 
-import type { UsersListOutput } from "../../../../../api/routing";
+import type { UsersListOutput } from "../../../../../api/users.routing";
 import type { User } from "../../../../../api/user";
 import { queryClient, useQuery } from "utils";
 

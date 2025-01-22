@@ -1,11 +1,12 @@
 import { buildUrl, queryClient, useQuery } from "utils";
 
 import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
+
+import type { Reservation } from "../../../../../api/reservation";
 import type {
   ReservationsListInput,
   ReservationsListOutput,
-} from "../../../../../api/routing";
-import type { Reservation } from "../../../../../api/reservation";
+} from "../../../../../api/reservations.routing";
 
 export const getReservationsQueryKey = () => ["reservations"]; // TODO: improve key with other params
 

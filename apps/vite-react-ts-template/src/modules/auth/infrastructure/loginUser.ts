@@ -3,7 +3,7 @@ import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
 import type {
   AuthLoginInput,
   AuthLoginOutput,
-} from "../../../../../api/routing";
+} from "../../../../../api/auth.routing";
 
 export interface ICredentials {
   // TODO: cleanup this interface

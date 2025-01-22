@@ -1,5 +1,5 @@
 import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
-import type { UserByIdOutput } from "../../../../../api/routing";
+import type { UserByIdOutput } from "../../../../../api/users.routing";
 import type { User } from "../../../../../api/user";
 
 export const getUser = async (id: string): Promise<User> => {
