@@ -1,5 +1,14 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { Box, Button, Grid, GridItem, Text, VStack } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Progress,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useAuthStore } from "modules/auth/application";
 import { useOfficeQuery } from "modules/offices/infrastructure";
 import {
@@ -113,12 +122,29 @@ export const ReservationSeatsOverview = () => {
       </PageHeader>
 
       {everyonesReservations.data && (
-        <>
-          <Box>Current availability: {}</Box>
-          <pre>
-            {JSON.stringify(everyonesReservations.data.capacity, null, 2)}
-          </pre>
-        </>
+        <Box py={4}>
+          <Box display="flex" justifyContent="space-between">
+            <Box>
+              {everyonesReservations.data.capacity.high_demand ? (
+                <Badge size="xl" colorScheme="red">
+                  High demand: booking is time capped
+                </Badge>
+              ) : (
+                <Badge size="xl">Normal demand, booking is not capped</Badge>
+              )}
+            </Box>
+            <Box>
+              <Text fontSize="lg">
+                {`Filled at ${everyonesReservations.data.capacity.filled_percentage} of total time capacity`}
+              </Text>
+            </Box>
+          </Box>
+          <Progress
+            borderRadius={4}
+            size="lg"
+            value={everyonesReservations.data.capacity.filled_ratio * 100}
+          />
+        </Box>
       )}
 
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
