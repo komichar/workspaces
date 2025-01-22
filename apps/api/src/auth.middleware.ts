@@ -39,10 +39,10 @@ export const authMiddleware = new Middleware({
   },
 });
 
-export const authorizedndpointFactory =
+export const authorizedEndpointFactory =
   defaultEndpointsFactory.addMiddleware(authMiddleware);
 
-export const adminEndpointFactory = authorizedndpointFactory
+export const adminEndpointFactory = authorizedEndpointFactory
   .addMiddleware(authMiddleware)
   .addMiddleware(
     new Middleware({

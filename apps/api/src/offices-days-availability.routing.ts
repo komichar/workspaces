@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
-import { authorizedndpointFactory } from "./auth.middleware.js";
+import { authorizedEndpointFactory } from "./auth.middleware.js";
 import { calculateTimeCapacity, capacitySchema } from "./capacity.service.js";
 import { db } from "./database.js";
 import { Office, officeSelectSchema } from "./office.js";
@@ -23,7 +23,7 @@ export type GetOfficeDayAvailabilityOutput = z.infer<
   typeof getOfficeDayAvailabilityOutput
 >;
 
-export const getOfficeDayAvailability = authorizedndpointFactory.build({
+export const getOfficeDayAvailability = authorizedEndpointFactory.build({
   method: "get",
   input: getOfficeDayAvailabilityInput,
   output: getOfficeDayAvailabilityOutput,
@@ -41,7 +41,7 @@ export const getOfficeDayAvailability = authorizedndpointFactory.build({
       .from(reservationsTable)
       .where(
         and(
-          eq(reservationsTable.user_id, options.user_id),
+          eq(reservationsTable.user_id, options.user.id),
           eq(reservationsTable.office_id, input.id),
           eq(reservationsTable.date, input.date)
         )

@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { defaultEndpointsFactory } from "express-zod-api";
 import createHttpError from "http-errors";
 import { z } from "zod";
-import { authorizedndpointFactory } from "./auth.middleware.js";
+import { authorizedEndpointFactory } from "./auth.middleware.js";
 import { db } from "./database.js";
 import { Office } from "./office.js";
 import {
@@ -65,7 +65,7 @@ export const createReservationInput = z.object({
 });
 export type CreateReservationInput = z.infer<typeof createReservationInput>;
 
-export const reservationsCreateEndpoint = authorizedndpointFactory.build({
+export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
   method: "post", // (default) or array ["get", "post", ...]
   input: createReservationInput,
   output: z.object({
