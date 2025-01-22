@@ -10,7 +10,7 @@ import { db } from "./database";
 import { officesTable, reservationsTable } from "./schema";
 import createHttpError from "http-errors";
 import { Office } from "./office";
-import { authenticatedEndpointFactory } from "./auth.middleware";
+import { authorizedndpointFactory } from "./auth.middleware";
 
 export const reservationsListOutput = z.object({
   reservations: reservationSelectSchema.array(),
@@ -47,7 +47,6 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
 });
 
 export const createReservationInput = z.object({
-  user_id: z.number().positive(),
   office_id: z.number().positive(),
   date: z.string().length(10),
   start_time: z.string().length(8),
@@ -56,7 +55,7 @@ export const createReservationInput = z.object({
 });
 export type CreateReservationInput = z.infer<typeof createReservationInput>;
 
-export const reservationsCreateEndpoint = authenticatedEndpointFactory.build({
+export const reservationsCreateEndpoint = authorizedndpointFactory.build({
   method: "post", // (default) or array ["get", "post", ...]
   input: createReservationInput,
   output: z.object({
@@ -85,7 +84,7 @@ export const reservationsCreateEndpoint = authenticatedEndpointFactory.build({
       .from(reservationsTable)
       .where(
         and(
-          eq(reservationsTable.user_id, input.user_id),
+          eq(reservationsTable.user_id, options.user.id),
           eq(reservationsTable.office_id, input.office_id),
           eq(reservationsTable.date, input.date)
         )
@@ -102,7 +101,7 @@ export const reservationsCreateEndpoint = authenticatedEndpointFactory.build({
     // high demand if 75% of a day's time is already booked, capacity * 0.75 * 8h
 
     const newReservation: NewReservation = {
-      user_id: input.user_id,
+      user_id: options.user.id,
       office_id: input.office_id,
       date: input.date,
       end_time: "18:00:00",

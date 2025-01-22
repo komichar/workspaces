@@ -15,7 +15,7 @@ export const authMiddleware = new Middleware({
     const authorization = z.string().safeParse(request.headers.authorization);
 
     if (!authorization.success) {
-      throw createHttpError.Unauthorized("Invalid authentication header");
+      throw createHttpError.Unauthorized("Invalid authorization header");
     }
 
     const bearerEmailValidation = z
@@ -39,10 +39,10 @@ export const authMiddleware = new Middleware({
   },
 });
 
-export const authenticatedEndpointFactory =
+export const authorizedndpointFactory =
   defaultEndpointsFactory.addMiddleware(authMiddleware);
 
-export const adminEndpointFactory = authenticatedEndpointFactory
+export const adminEndpointFactory = authorizedndpointFactory
   .addMiddleware(authMiddleware)
   .addMiddleware(
     new Middleware({

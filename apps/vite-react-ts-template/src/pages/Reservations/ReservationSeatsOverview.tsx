@@ -161,7 +161,6 @@ export const ReservationSeatsOverview = () => {
                         .mutateAsync({
                           email: user.email,
                           input: {
-                            user_id: user.id,
                             office_id: user.office_id as number,
                             date: params.date as string,
                             end_time: "00:00:00",
