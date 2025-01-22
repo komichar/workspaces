@@ -8,12 +8,15 @@ import type {
   ReservationsListOutput,
 } from "../../../../../api/src/reservations.routing";
 
-export const getReservationsQueryKey = () => ["reservations"]; // TODO: improve key with other params
+export const getReservationsQueryKey = (params: ReservationsListInput) => [
+  "reservations",
+  JSON.stringify(params),
+];
 
 // TOOD: read response header about high demand and persist that data
 // in order to show on UI
 const getReservationsQuery = (params: ReservationsListInput) => ({
-  queryKey: getReservationsQueryKey(),
+  queryKey: getReservationsQueryKey(params),
   queryFn: (): Promise<ReservationsListOutput> =>
     httpServiceReservationSystem
       .get<APIResponseWrapper<ReservationsListOutput>>(
