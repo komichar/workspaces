@@ -17,6 +17,8 @@ import {
   reservationsListEndpoint,
 } from "./reservations.routing.js";
 import { userByIdEndpoint, usersListEndpoint } from "./users.routing.js";
+import { daysAnotherListEndpoint, daysListEndpoint } from "./days.routing.js";
+import { getOfficeDayAvailability } from "./offices-days-availability.routing.js";
 
 const helloWorldEndpoint = defaultEndpointsFactory.build({
   method: "get", // (default) or array ["get", "post", ...]
@@ -44,6 +46,12 @@ export const routing: Routing = {
     }).nest({
       ":id": new DependsOnMethod({
         get: officeByIdEndpoint,
+      }).nest({
+        days: new DependsOnMethod({}).nest({
+          ":date": new DependsOnMethod({}).nest({
+            availability: getOfficeDayAvailability,
+          }),
+        }),
       }),
     }),
     users: usersListEndpoint.nest({
