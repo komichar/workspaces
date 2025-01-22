@@ -1,14 +1,13 @@
 import {
   Box,
-  Heading,
-  Container,
-  Text,
   Button,
-  Stack,
+  Container,
+  Heading,
   Icon,
+  Stack,
   VStack,
-  useColorModeValue,
   createIcon,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useBrandColor, useSecondaryTextColor } from "theme";
