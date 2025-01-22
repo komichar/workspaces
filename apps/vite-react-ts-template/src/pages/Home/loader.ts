@@ -1,5 +1,5 @@
-import { productsLoader } from "modules/products/infrastructure";
+import { usersLoader } from "modules/auth/infrastructure";
 
 export const homePageLoader = () => {
-  return productsLoader();
+  return usersLoader();
 };

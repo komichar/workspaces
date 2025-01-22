@@ -2,25 +2,16 @@ import { Page } from "shared/Layout";
 import { InternalErrorResult } from "shared/Result";
 import { useRouteError } from "shared/Router";
 
-import {
-  HeroSection,
-  FeatureSection,
-  PricingSection,
-} from "modules/marketing/presentation";
-import { useProductsQuery } from "modules/products/infrastructure";
+import { HeroSection } from "modules/marketing/presentation";
 
 interface IProps {
   fallbackProductsNumber?: number;
 }
 
 const HomePage = ({ fallbackProductsNumber }: IProps) => {
-  const { data } = useProductsQuery();
-
   return (
     <Page maxW="container.xl" spacing={{ base: 8, lg: 20 }}>
-      <HeroSection
-        productNumber={fallbackProductsNumber ?? data?.meta.total ?? 0}
-      />
+      <HeroSection productNumber={fallbackProductsNumber ?? 0} />
     </Page>
   );
 };

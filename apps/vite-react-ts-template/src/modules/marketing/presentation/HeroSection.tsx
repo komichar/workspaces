@@ -36,7 +36,7 @@ const HeroSection = ({ productNumber }: IProps) => {
           fontSize={{ base: "3xl", sm: "4xl", md: "6xl", lg: "7xl" }}
           lineHeight={"110%"}
         >
-          Head over to login <br />
+          Head over to sign in <br />
         </Heading>
         <VStack
           spacing={3}
