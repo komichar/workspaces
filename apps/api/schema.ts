@@ -11,8 +11,8 @@ export const usersTable = sqliteTable("users", {
 export const officesTable = sqliteTable("offices", {
   id: int().primaryKey({ autoIncrement: true }),
   city: text().notNull(),
-  capacity: integer(),
-  is_peak_limited: integer({ mode: "boolean" }).default(false),
+  capacity: integer().notNull(),
+  is_peak_limited: integer({ mode: "boolean" }).notNull().default(false),
 });
 
 export const reservationsTable = sqliteTable("reservations", {

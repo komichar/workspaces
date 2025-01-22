@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import {
   NewReservation,
   Reservation,
@@ -11,6 +11,7 @@ import { officesTable, reservationsTable } from "./schema";
 import createHttpError from "http-errors";
 import { Office } from "./office";
 import { authorizedndpointFactory } from "./auth.middleware";
+import { calculateTimeCapacity } from "./time-capacity.service";
 
 export const reservationsListOutput = z.object({
   reservations: reservationSelectSchema.array(),
@@ -99,12 +100,14 @@ export const reservationsCreateEndpoint = authorizedndpointFactory.build({
 
     // TODO: calculate high demand, throw 400 if peak limited & hours dont match
     // high demand if 75% of a day's time is already booked, capacity * 0.75 * 8h
+    const capacityBefore = await calculateTimeCapacity(office, input.date);
+    console.log("time capacity before", capacityBefore);
 
     const newReservation: NewReservation = {
       user_id: options.user.id,
       office_id: input.office_id,
       date: input.date,
-      end_time: "18:00:00",
+      end_time: "17:00:00",
       start_time: "09:00:00",
       seat_number: input.seat_number,
     };
@@ -113,6 +116,9 @@ export const reservationsCreateEndpoint = authorizedndpointFactory.build({
       .insert(reservationsTable)
       .values(newReservation)
       .returning();
+
+    const capacityAfter = await calculateTimeCapacity(office, input.date);
+    console.log("time capacity after", capacityAfter);
 
     return { reservation: createdReservation };
   },

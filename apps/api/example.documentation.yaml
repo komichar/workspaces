@@ -290,16 +290,12 @@ paths:
                           city:
                             type: string
                           capacity:
-                            type:
-                              - integer
-                              - "null"
+                            type: integer
                             format: int64
                             minimum: -9007199254740991
                             maximum: 9007199254740991
                           is_peak_limited:
-                            type:
-                              - boolean
-                              - "null"
+                            type: boolean
                         required:
                           - id
                           - city
@@ -373,16 +369,12 @@ paths:
                             city:
                               type: string
                             capacity:
-                              type:
-                                - integer
-                                - "null"
+                              type: integer
                               format: int64
                               minimum: -9007199254740991
                               maximum: 9007199254740991
                             is_peak_limited:
-                              type:
-                                - boolean
-                                - "null"
+                              type: boolean
                           required:
                             - id
                             - city
@@ -470,16 +462,12 @@ paths:
                           city:
                             type: string
                           capacity:
-                            type:
-                              - integer
-                              - "null"
+                            type: integer
                             format: int64
                             minimum: -9007199254740991
                             maximum: 9007199254740991
                           is_peak_limited:
-                            type:
-                              - boolean
-                              - "null"
+                            type: boolean
                         required:
                           - id
                           - city
@@ -988,11 +976,6 @@ paths:
             schema:
               type: object
               properties:
-                user_id:
-                  type: number
-                  format: double
-                  exclusiveMinimum: 0
-                  maximum: 1.7976931348623157e+308
                 office_id:
                   type: number
                   format: double
@@ -1016,7 +999,6 @@ paths:
                   exclusiveMinimum: 0
                   maximum: 1.7976931348623157e+308
               required:
-                - user_id
                 - office_id
                 - date
                 - start_time

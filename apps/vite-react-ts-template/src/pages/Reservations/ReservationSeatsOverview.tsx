@@ -64,7 +64,7 @@ export const ReservationSeatsOverview = () => {
     const combined: MixedReservation[] = [];
 
     // fill in with seats empty reservations
-    for (let index = 0; index < office.data.capacity!; index++) {
+    for (let index = 0; index < office.data.capacity; index++) {
       const seat_number = index + 1;
 
       const item: AvailableReservation = {
@@ -98,7 +98,11 @@ export const ReservationSeatsOverview = () => {
     <Page>
       <PageHeader
         title={`Reservations for ${params.date}`}
-        description="Make reservations"
+        description={
+          office.data
+            ? `You work at ${office.data.city} office (id: ${office.data.id}):`
+            : `You work at...`
+        }
       >
         <Button
           leftIcon={<ArrowBackIcon />}
