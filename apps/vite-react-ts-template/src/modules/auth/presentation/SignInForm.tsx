@@ -88,7 +88,7 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
 
         <VStack textAlign="left">
           <Heading fontSize={{ base: "2xl", md: "4xl" }}>
-            Existing users
+            Use existing users to sign in
           </Heading>
 
           {users.data && (
@@ -114,7 +114,7 @@ function ExistingUser({ user }: Props) {
 
   return (
     <Box display="flex" py={2} alignItems="center">
-      <Button mr={2} size="xs" onClick={onCopy}>
+      <Button mr={2} size="sm" onClick={onCopy}>
         {hasCopied ? "Copied!" : "Copy"}
       </Button>
       <Text mr={2} color={secondaryColor}>

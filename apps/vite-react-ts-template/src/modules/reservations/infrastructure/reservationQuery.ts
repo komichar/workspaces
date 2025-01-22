@@ -8,10 +8,15 @@ import type {
 } from "../../../../../api/src/reservations.routing";
 import { useMutation } from "@tanstack/react-query";
 
-export const getReservationQueryKey = () => ["reservation"]; // TODO: improve key with other params
+export const getReservationQueryKey = (params: ReservationsListInput) => [
+  "reservation",
+  params.date,
+  params.office_id,
+  params.user_id,
+];
 
 const getReservationQuery = (params: ReservationsListInput) => ({
-  queryKey: getReservationQueryKey(),
+  queryKey: getReservationQueryKey(params),
   queryFn: (): Promise<ReservationsListOutput> =>
     httpServiceReservationSystem
       .get<APIResponseWrapper<ReservationsListOutput>>(

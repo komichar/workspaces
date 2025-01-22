@@ -10,7 +10,9 @@ import type {
 
 export const getReservationsQueryKey = (params: ReservationsListInput) => [
   "reservations",
-  JSON.stringify(params),
+  params.date,
+  params.office_id,
+  params.user_id,
 ];
 
 // TOOD: read response header about high demand and persist that data
