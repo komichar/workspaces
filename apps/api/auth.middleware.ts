@@ -8,29 +8,32 @@ import { eq } from "drizzle-orm";
 
 export const authMiddleware = new Middleware({
   security: {
-    // this information is optional and used for generating documentation
-    and: [
-      { type: "input", name: "key" },
-      { type: "header", name: "token" },
-    ],
+    and: [{ type: "bearer" }],
   },
+  input: z.object({}),
   handler: async ({ input, request, logger }) => {
-    const authenticationHeader = z
-      .string()
-      .parse(request.headers.authentication);
+    const authorization = z.string().safeParse(request.headers.authorization);
 
-    const bearerEmail = z
+    if (!authorization.success) {
+      throw createHttpError.Unauthorized("Invalid authentication header");
+    }
+
+    const bearerEmailValidation = z
       .string()
       .email()
-      .parse(authenticationHeader.replace("Bearer ", ""));
+      .safeParse(authorization.data.replace("Bearer ", ""));
+
+    if (!bearerEmailValidation.success) {
+      throw createHttpError.Unauthorized("Invalid token - must be an email");
+    }
 
     const [user]: User[] = await db
       .select()
       .from(usersTable)
-      .where(eq(usersTable.email, bearerEmail))
+      .where(eq(usersTable.email, bearerEmailValidation.data))
       .limit(1);
 
-    if (!user) throw createHttpError(401, "Invalid token");
+    if (!user) throw createHttpError.Unauthorized("User not found");
 
     return { user }; // provides endpoints with options.user
   },
@@ -38,3 +41,17 @@ export const authMiddleware = new Middleware({
 
 export const authenticatedEndpointFactory =
   defaultEndpointsFactory.addMiddleware(authMiddleware);
+
+export const adminEndpointFactory = authenticatedEndpointFactory
+  .addMiddleware(authMiddleware)
+  .addMiddleware(
+    new Middleware({
+      input: z.object({}),
+      handler: async ({ options }) => {
+        if (!options.user.admin)
+          throw createHttpError.Forbidden("User must be admin");
+
+        return {};
+      },
+    })
+  );

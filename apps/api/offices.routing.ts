@@ -4,6 +4,7 @@ import { NewOffice, Office, officeSelectSchema } from "./office";
 import { defaultEndpointsFactory } from "express-zod-api";
 import { db } from "./database";
 import { officesTable } from "./schema";
+import { adminEndpointFactory } from "./auth.middleware";
 
 export const officeListOutput = z.object({
   offices: officeSelectSchema.array(),
@@ -45,7 +46,7 @@ export const officeByIdEndpoint = defaultEndpointsFactory.build({
   },
 });
 
-export const officeCreateEndpoint = defaultEndpointsFactory.build({
+export const officeCreateEndpoint = adminEndpointFactory.build({
   method: "post", // (default) or array ["get", "post", ...]
   input: z.object({
     city: z.string().min(3).max(255),

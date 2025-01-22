@@ -18,7 +18,7 @@ export const config = createConfig({
     ...defaultHeaders,
     "Access-Control-Allow-Origin": "*", // Allow all origins or replace with a specific origin
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS", // Specify allowed methods
-    "Access-Control-Allow-Headers": "Content-Type, Authentication", // Include 'Authentication' header
+    "Access-Control-Allow-Headers": "Content-Type, Authorization", // Include 'Authorization' header
     "Access-Control-Max-Age": "5000", // Cache the preflight response for 5000 seconds
   }),
 });

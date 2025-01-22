@@ -37,7 +37,7 @@ export const getReservationCreateMutation = () => ({
       buildUrl(`v1/reservations`),
       input,
       {
-        headers: { Authentication: `Bearer ${email}` },
+        headers: { Authorization: `Bearer ${email}` },
       }
     );
   },

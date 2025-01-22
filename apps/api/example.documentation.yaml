@@ -443,6 +443,8 @@ paths:
                 - city
                 - capacity
                 - is_peak_limited
+      security:
+        - HTTP_1: []
       responses:
         "200":
           description: POST /v1/offices Positive response
@@ -1021,8 +1023,7 @@ paths:
                 - end_time
                 - seat_number
       security:
-        - APIKEY_1: []
-          APIKEY_2: []
+        - HTTP_1: []
       responses:
         "200":
           description: POST /v1/reservations Positive response
@@ -1116,16 +1117,9 @@ components:
   requestBodies: {}
   headers: {}
   securitySchemes:
-    APIKEY_1:
-      type: apiKey
-      in: query
-      name: key
-      x-in-actual: body
-      description: key MUST be supplied within the request body instead of query
-    APIKEY_2:
-      type: apiKey
-      in: header
-      name: token
+    HTTP_1:
+      type: http
+      scheme: bearer
   links: {}
   callbacks: {}
 tags: []
