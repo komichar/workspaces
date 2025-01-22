@@ -1,15 +1,11 @@
-import { z } from "zod";
 import { and, eq } from "drizzle-orm";
-import { NewUser, User, userSelectSchema } from "./user.js";
-import { defaultEndpointsFactory } from "express-zod-api";
-import { officesTable, reservationsTable, usersTable } from "./schema.js";
-import createHttpError from "http-errors";
-import { db } from "./database.js";
+import { z } from "zod";
 import { authorizedndpointFactory } from "./auth.middleware.js";
-import { Office, officeSelectSchema } from "./office.js";
 import { calculateTimeCapacity, capacitySchema } from "./capacity.service.js";
-import { reservationsListOutput } from "./reservations.routing.js";
+import { db } from "./database.js";
+import { Office, officeSelectSchema } from "./office.js";
 import { Reservation, reservationSelectSchema } from "./reservation.js";
+import { officesTable, reservationsTable } from "./schema.js";
 
 const getOfficeDayAvailabilityInput = z.object({
   id: z.coerce.number().positive(),
