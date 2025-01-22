@@ -864,7 +864,7 @@ paths:
     get:
       operationId: GetV1Reservations
       parameters:
-        - name: id
+        - name: user_id
           in: query
           required: false
           description: GET /v1/reservations Parameter
@@ -873,24 +873,23 @@ paths:
             format: double
             exclusiveMinimum: 0
             maximum: 1.7976931348623157e+308
-        - name: name
+        - name: office_id
           in: query
-          required: false
+          required: true
+          description: GET /v1/reservations Parameter
+          schema:
+            type: number
+            format: double
+            exclusiveMinimum: 0
+            maximum: 1.7976931348623157e+308
+        - name: date
+          in: query
+          required: true
           description: GET /v1/reservations Parameter
           schema:
             type: string
-        - name: email
-          in: query
-          required: false
-          description: GET /v1/reservations Parameter
-          schema:
-            type: string
-        - name: admin
-          in: query
-          required: false
-          description: GET /v1/reservations Parameter
-          schema:
-            type: string
+            minLength: 10
+            maxLength: 10
       responses:
         "200":
           description: GET /v1/reservations Positive response
@@ -905,7 +904,7 @@ paths:
                   data:
                     type: object
                     properties:
-                      users:
+                      reservations:
                         type: array
                         items:
                           type: object
@@ -915,29 +914,40 @@ paths:
                               format: int64
                               minimum: -9007199254740991
                               maximum: 9007199254740991
-                            office_id:
-                              type:
-                                - integer
-                                - "null"
+                            user_id:
+                              type: integer
                               format: int64
                               minimum: -9007199254740991
                               maximum: 9007199254740991
-                            name:
+                            office_id:
+                              type: integer
+                              format: int64
+                              minimum: -9007199254740991
+                              maximum: 9007199254740991
+                            seat_number:
+                              type: integer
+                              format: int64
+                              minimum: -9007199254740991
+                              maximum: 9007199254740991
+                            date:
                               type: string
-                            admin:
-                              type:
-                                - boolean
-                                - "null"
-                            email:
+                            start_time:
+                              type: string
+                            end_time:
+                              type: string
+                            status:
                               type: string
                           required:
                             - id
+                            - user_id
                             - office_id
-                            - name
-                            - admin
-                            - email
+                            - seat_number
+                            - date
+                            - start_time
+                            - end_time
+                            - status
                     required:
-                      - users
+                      - reservations
                 required:
                   - status
                   - data
@@ -1010,6 +1020,9 @@ paths:
                 - start_time
                 - end_time
                 - seat_number
+      security:
+        - APIKEY_1: []
+          APIKEY_2: []
       responses:
         "200":
           description: POST /v1/reservations Positive response
@@ -1102,7 +1115,17 @@ components:
   examples: {}
   requestBodies: {}
   headers: {}
-  securitySchemes: {}
+  securitySchemes:
+    APIKEY_1:
+      type: apiKey
+      in: query
+      name: key
+      x-in-actual: body
+      description: key MUST be supplied within the request body instead of query
+    APIKEY_2:
+      type: apiKey
+      in: header
+      name: token
   links: {}
   callbacks: {}
 tags: []

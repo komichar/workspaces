@@ -159,12 +159,15 @@ export const ReservationSeatsOverview = () => {
                     onClick={async () => {
                       await reservationCreateMutation
                         .mutateAsync({
-                          user_id: user.id,
-                          office_id: user.office_id as number,
-                          date: params.date as string,
-                          end_time: "00:00:00",
-                          seat_number: reservation.seat_number,
-                          start_time: "00:00:00",
+                          email: user.email,
+                          input: {
+                            user_id: user.id,
+                            office_id: user.office_id as number,
+                            date: params.date as string,
+                            end_time: "00:00:00",
+                            seat_number: reservation.seat_number,
+                            start_time: "00:00:00",
+                          },
                         })
                         .then(() => notifyCreatedSuccess())
                         .catch(() => notifyCreatedFailure());

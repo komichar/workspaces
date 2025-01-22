@@ -32,17 +32,28 @@ export const reservationLoader = async (params: ReservationsListInput) =>
   queryClient.ensureQueryData(getReservationQuery(params));
 
 export const getReservationCreateMutation = () => ({
-  mutationFn: async (input: CreateReservationInput) => {
+  mutationFn: async (email: string, input: CreateReservationInput) => {
     return httpServiceReservationSystem.post(
       buildUrl(`v1/reservations`),
-      input
+      input,
+      {
+        headers: { Authentication: `Bearer ${email}` },
+      }
     );
   },
 });
 
 export const useReservationCreateMutation = () => {
+  const { mutationFn } = getReservationCreateMutation();
+
   return useMutation({
-    ...getReservationCreateMutation(),
+    mutationFn: ({
+      email,
+      input,
+    }: {
+      email: string;
+      input: CreateReservationInput;
+    }) => mutationFn(email, input),
   });
 };
 

@@ -14,5 +14,11 @@ export const config = createConfig({
   http: {
     listen: 8090, // port, UNIX socket or options
   },
-  cors: true,
+  cors: ({ defaultHeaders, request, endpoint, logger }) => ({
+    ...defaultHeaders,
+    "Access-Control-Allow-Origin": "*", // Allow all origins or replace with a specific origin
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS", // Specify allowed methods
+    "Access-Control-Allow-Headers": "Content-Type, Authentication", // Include 'Authentication' header
+    "Access-Control-Max-Age": "5000", // Cache the preflight response for 5000 seconds
+  }),
 });

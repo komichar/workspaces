@@ -10,6 +10,7 @@ import { db } from "./database";
 import { officesTable, reservationsTable } from "./schema";
 import createHttpError from "http-errors";
 import { Office } from "./office";
+import { authenticatedEndpointFactory } from "./auth.middleware";
 
 export const reservationsListOutput = z.object({
   reservations: reservationSelectSchema.array(),
@@ -55,7 +56,7 @@ export const createReservationInput = z.object({
 });
 export type CreateReservationInput = z.infer<typeof createReservationInput>;
 
-export const reservationsCreateEndpoint = defaultEndpointsFactory.build({
+export const reservationsCreateEndpoint = authenticatedEndpointFactory.build({
   method: "post", // (default) or array ["get", "post", ...]
   input: createReservationInput,
   output: z.object({
