@@ -10,6 +10,7 @@ const AUTH_KEY = "fake_store_is_authenticated";
 
 // could be also https://www.npmjs.com/package/zustand-persist lib for advanced use cases
 const isLoggedIn = () => localStorage.getItem(AUTH_KEY) === "true";
+const getUserId = () => localStorage.getItem(AUTH_USER_ID) as string;
 
 interface IStore {
   isAuthenticated: boolean;
@@ -26,6 +27,8 @@ const zustandContext = createContext<AuthStore | null>(null);
 
 export const Provider = zustandContext.Provider;
 
+const AUTH_USER_ID = "user_id";
+
 export const useAuthStore = <T>(selector: (state: IStore) => T) => {
   const store = useContext(zustandContext);
 
@@ -39,7 +42,7 @@ export const initializeAuthStore = (preloadedState: Partial<IStore> = {}) => {
     if (isLoggedIn()) {
       set({ state: "loading" });
 
-      getUser("1")
+      getUser(getUserId())
         .then((user) => {
           set({
             user,
@@ -73,7 +76,7 @@ export const initializeAuthStore = (preloadedState: Partial<IStore> = {}) => {
           const user = await getUser(loginResult.data.user.id.toString());
 
           localStorage.setItem(AUTH_KEY, "true");
-          localStorage.setItem("user_id", user.id.toString());
+          localStorage.setItem(AUTH_USER_ID, user.id.toString());
 
           set({
             isAuthenticated: true,
