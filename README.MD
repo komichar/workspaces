@@ -60,7 +60,7 @@ For best VS CODE TypeScript intellisense & debugging, I suggest you **do not** w
    ```
    Drizzle Studio is up and running on https://local.drizzle.studio
    ```
-   Visit https://local.drizzle.studio and see offices & users
+   Visit https://local.drizzle.studio and see `offices`. Powerful UI allows to easily browse relationship `users` entity in a subview  
    ![Image](https://github.com/user-attachments/assets/347c554f-987c-4dba-a1b7-a01d6985750b)
 6. from api dir, run `pnpm run dev`
 7. swagger runs on /docs,
