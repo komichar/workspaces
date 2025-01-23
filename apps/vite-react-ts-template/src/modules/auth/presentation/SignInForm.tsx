@@ -13,7 +13,12 @@ import {
 } from "@chakra-ui/react";
 import { useSecondaryTextColor } from "theme";
 
-import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
+import {
+  ArrowForwardIcon,
+  ArrowRightIcon,
+  CheckIcon,
+  CopyIcon,
+} from "@chakra-ui/icons";
 import { IconButton, Tooltip } from "@chakra-ui/react";
 
 import { TextInput } from "shared/Form";
@@ -28,7 +33,10 @@ interface IProps {
   initialPassword?: string;
 }
 
-export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
+export const SignInForm = ({
+  initialUsername = "",
+  initialPassword = "",
+}: IProps) => {
   const [username, setUsername] = useState(initialUsername);
   const [password, setPassword] = useState(initialPassword);
 
@@ -97,10 +105,15 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
           {users.data && (
             <UnorderedList>
               {users.data.map((user) => (
-                <AnotherExistingUser
+                <ExistingUser
                   key={user.id}
                   user={user}
-                ></AnotherExistingUser>
+                  onSignInClick={(email) =>
+                    login({ username: email, password })
+                      .then(() => notifySuccess())
+                      .catch(() => notifyFailure())
+                  }
+                ></ExistingUser>
               ))}
             </UnorderedList>
           )}
@@ -112,32 +125,10 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
 
 type Props = {
   user: User;
+  onSignInClick: (email: string) => void;
 };
 
-function ExistingUser({ user }: Props) {
-  const secondaryColor = useSecondaryTextColor();
-  const { onCopy, hasCopied } = useClipboard(user.email);
-
-  return (
-    <Box display="flex" py={2} alignItems="center">
-      <Button mr={2} size="sm" onClick={onCopy}>
-        {hasCopied ? "Copied!" : "Copy"}
-      </Button>
-      <Text mr={2} color={secondaryColor}>
-        {user.email}{" "}
-      </Text>
-      <Box display="inline-block">
-        {user.admin ? (
-          <Badge colorScheme="green">Admin</Badge>
-        ) : (
-          <Badge>Regular</Badge>
-        )}
-      </Box>
-    </Box>
-  );
-}
-
-function AnotherExistingUser({ user }: { user: User }) {
+function ExistingUser({ user, onSignInClick }: Props) {
   const { onCopy, hasCopied } = useClipboard(user.email);
   const secondaryColor = useColorModeValue("gray.600", "gray.400");
 
@@ -150,6 +141,20 @@ function AnotherExistingUser({ user }: { user: User }) {
           icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
           onClick={onCopy}
           size="sm"
+          variant="outline"
+        />
+      </Tooltip>
+
+      <Tooltip
+        label={hasCopied ? "Email copied!" : "Sign in as this user"}
+        fontSize="sm"
+      >
+        <IconButton
+          aria-label="Sign in as this user"
+          icon={hasCopied ? <CheckIcon /> : <ArrowForwardIcon />}
+          onClick={() => onSignInClick(user.email)}
+          size="sm"
+          colorScheme="blue"
           variant="outline"
         />
       </Tooltip>
@@ -168,5 +173,3 @@ function AnotherExistingUser({ user }: { user: User }) {
     </Box>
   );
 }
-
-export default ExistingUser;
