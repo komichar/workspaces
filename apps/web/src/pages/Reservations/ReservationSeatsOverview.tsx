@@ -1,30 +1,19 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import {
-  Badge,
-  Box,
-  Button,
-  Grid,
-  GridItem,
-  Progress,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Badge, Box, Button, Progress, Text, VStack } from "@chakra-ui/react";
 import { useAuthStore } from "modules/auth/application";
-import { useOfficeQuery } from "modules/offices/infrastructure";
 import {
   useReservationCreateMutation,
   useReservationDeleteMutation,
-  useReservationsQuery,
 } from "modules/reservations/infrastructure";
 import { useMemo } from "react";
 import { Page, PageHeader } from "shared/Layout";
 import { useNavigate, useParams } from "shared/Router";
 import { useNotImplementedYetToast } from "shared/Toast";
 
+import { useAvailabilityQuery } from "modules/availability/infrastructure";
 import { useReservationCreatedNotifications } from "modules/reservations/presentation/useReservationCreatedNotifications";
 import { useReservationDeletedNotifications } from "modules/reservations/presentation/useReservationDeletedNotifications";
 import type { Reservation } from "../../../../api/src/reservation";
-import { useAvailabilityQuery } from "modules/availability/infrastructure";
 import { SeatGrid } from "./SeatGrid";
 
 type AvailableReservation = Omit<Reservation, "user_id"> & {

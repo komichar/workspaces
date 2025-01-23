@@ -11,14 +11,8 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
-import { useSecondaryTextColor } from "theme";
 
-import {
-  ArrowForwardIcon,
-  ArrowRightIcon,
-  CheckIcon,
-  CopyIcon,
-} from "@chakra-ui/icons";
+import { ArrowForwardIcon, CheckIcon, CopyIcon } from "@chakra-ui/icons";
 import { IconButton, Tooltip } from "@chakra-ui/react";
 
 import { TextInput } from "shared/Form";
