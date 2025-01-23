@@ -10,8 +10,7 @@ export const getAvailabilityQueryKey = (
 ) => ["availability", params.date, params.id];
 
 const getAvailabilityQuery = (
-  email: string,
-  params: GetOfficeDayAvailabilityInput
+  params: GetOfficeDayAvailabilityInput & { email: string }
 ) => ({
   queryKey: getAvailabilityQueryKey(params),
   queryFn: (): Promise<GetOfficeDayAvailabilityOutput> =>
@@ -21,22 +20,21 @@ const getAvailabilityQuery = (
           `v1/offices/${params.id}/days/${params.date}/availability`
         ),
         {
-          headers: { Authorization: `Bearer ${email}` },
+          headers: { Authorization: `Bearer ${params.email}` },
         }
       )
       .then((res) => res.data),
 });
 
 export const useAvailabilityQuery = (
-  email: string,
-  params: GetOfficeDayAvailabilityInput
+  params: GetOfficeDayAvailabilityInput & { email: string }
 ) => {
   return useQuery({
-    ...getAvailabilityQuery(email, params),
+    ...getAvailabilityQuery(params),
   });
 };
 
 export const availabilityLoader = async (
   email: string,
   params: GetOfficeDayAvailabilityInput
-) => queryClient.ensureQueryData(getAvailabilityQuery(email, params));
+) => queryClient.ensureQueryData(getAvailabilityQuery({ ...params, email }));

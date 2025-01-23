@@ -11,6 +11,7 @@
     "build": "tsc -p ./tsconfig.json",
     "start": "node -r dotenv/config ./dist/main.js",
     "docs:gen": "tsx ./generate-documentation.script.ts",
+    "predev": "pnpm run docs:gen",
     "dev": "tsx watch ./src/main.ts"
   },
   "keywords": [],

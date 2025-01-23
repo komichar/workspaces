@@ -27,6 +27,9 @@ export const OverviewListItem = ({ date, dayName }: Props) => {
     user_id: user!.id,
   });
 
+  const owner =
+    reservation.data?.user_id && reservation.data?.user_id == user?.id;
+
   return (
     <Box p={4} bg="gray.100" key={date} borderRadius={8}>
       <HStack justify={"space-between"} alignContent={"center"}>
@@ -35,7 +38,7 @@ export const OverviewListItem = ({ date, dayName }: Props) => {
           <Text>{dayName}</Text>
         </Heading>
         <Stack direction="row" spacing={4}>
-          {reservation.data?.id && (
+          {owner && (
             <Button
               isLoading={reservationDeleteMutation.isLoading}
               loadingText="Cancelling"
@@ -50,7 +53,7 @@ export const OverviewListItem = ({ date, dayName }: Props) => {
                 await reservation.refetch();
               }}
             >
-              Cancel seat {reservation.data.seat_number}
+              Cancel seat {reservation.data?.seat_number}
             </Button>
           )}
 

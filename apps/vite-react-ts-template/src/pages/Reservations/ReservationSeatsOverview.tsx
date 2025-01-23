@@ -24,6 +24,7 @@ import { useNotImplementedYetToast } from "shared/Toast";
 import { useReservationCreatedNotifications } from "modules/reservations/presentation/useReservationCreatedNotifications";
 import { useReservationDeletedNotifications } from "modules/reservations/presentation/useReservationDeletedNotifications";
 import type { Reservation } from "../../../../api/src/reservation";
+import { useAvailabilityQuery } from "modules/availability/infrastructure";
 
 type AvailableReservation = Omit<Reservation, "user_id"> & {
   user_id: null;
@@ -49,31 +50,25 @@ export const ReservationSeatsOverview = () => {
     throw new Error("User not found");
   }
 
-  const everyonesReservations = useReservationsQuery({
+  const availability = useAvailabilityQuery({
     date: params.date as string,
-    office_id: user?.office_id!,
-    // user_id: user.id,
+    id: user.office_id as number,
+    email: user.email,
   });
-
-  const office = useOfficeQuery(`${user.office_id}`);
 
   const mixedReservations: MixedReservation[] = useMemo(() => {
     if (!user) {
       return [];
     }
 
-    if (!office.data) {
-      return [];
-    }
-
-    if (!everyonesReservations.data) {
+    if (!availability.data) {
       return [];
     }
 
     const combined: MixedReservation[] = [];
 
     // fill in with seats empty reservations
-    for (let index = 0; index < office.data.capacity; index++) {
+    for (let index = 0; index < availability.data.office.capacity; index++) {
       const seat_number = index + 1;
 
       const item: AvailableReservation = {
@@ -91,25 +86,25 @@ export const ReservationSeatsOverview = () => {
     }
 
     // fill in the reservations with reservations by seat number
-    everyonesReservations.data.reservations.forEach((reservation) => {
+    availability.data.reservations.forEach((reservation) => {
       const seat_number = reservation.seat_number - 1;
-      combined[seat_number] = reservation;
+      combined[seat_number] = structuredClone(reservation);
     });
 
     return combined;
-  }, [
-    JSON.stringify(user),
-    everyonesReservations.dataUpdatedAt,
-    office.dataUpdatedAt,
-  ]);
+  }, [JSON.stringify(availability.data)]);
+
+  if (!availability.data) {
+    return <h1>loading</h1>;
+  }
 
   return (
     <Page>
       <PageHeader
         title={`Reservations for ${params.date}`}
         description={
-          office.data
-            ? `You work at ${office.data.city} office (id: ${office.data.id})`
+          availability.data.office
+            ? `You work at ${availability.data.office.city} office (id: ${availability.data.office.id})`
             : `You work at...`
         }
       >
@@ -121,11 +116,11 @@ export const ReservationSeatsOverview = () => {
         </Button>
       </PageHeader>
 
-      {everyonesReservations.data && (
+      {availability.data && (
         <Box py={4}>
           <Box display="flex" justifyContent="space-between">
             <Box>
-              {everyonesReservations.data.capacity.high_demand ? (
+              {availability.data.capacity.high_demand ? (
                 <Badge size="xl" colorScheme="red">
                   High demand: booking is time capped
                 </Badge>
@@ -135,14 +130,14 @@ export const ReservationSeatsOverview = () => {
             </Box>
             <Box>
               <Text fontSize="lg">
-                {`Filled at ${everyonesReservations.data.capacity.filled_percentage} of total time capacity`}
+                {`Filled at ${availability.data.capacity.filled_percentage} of total time capacity`}
               </Text>
             </Box>
           </Box>
           <Progress
             borderRadius={4}
             size="lg"
-            value={everyonesReservations.data.capacity.filled_ratio * 100}
+            value={availability.data.capacity.filled_ratio * 100}
           />
         </Box>
       )}
@@ -184,7 +179,7 @@ export const ReservationSeatsOverview = () => {
                         .then(() => notifyDeletedSuccess())
                         .catch(() => notifyDeletedFailure());
 
-                      await everyonesReservations.refetch();
+                      await availability.refetch();
                     }}
                   >
                     Cancel
@@ -210,7 +205,7 @@ export const ReservationSeatsOverview = () => {
                         .then(() => notifyCreatedSuccess())
                         .catch(() => notifyCreatedFailure());
 
-                      await everyonesReservations.refetch();
+                      await availability.refetch();
                     }}
                   >
                     Reserve

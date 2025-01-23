@@ -41,7 +41,6 @@ export const getOfficeDayAvailability = authorizedEndpointFactory.build({
       .from(reservationsTable)
       .where(
         and(
-          eq(reservationsTable.user_id, options.user.id),
           eq(reservationsTable.office_id, input.id),
           eq(reservationsTable.date, input.date)
         )
