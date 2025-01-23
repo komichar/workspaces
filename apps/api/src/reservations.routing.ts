@@ -104,8 +104,7 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
       );
     }
 
-    // TODO: calculate high demand, throw 400 if peak limited & hours dont match
-    // high demand if 75% of a day's time is already booked, capacity * 0.75 * 8h
+    // TODO: calculate high demand, throw 400 to reject the full day reservation
     const capacityBefore = await calculateTimeCapacity(office, input.date);
 
     const newReservation: NewReservation = {

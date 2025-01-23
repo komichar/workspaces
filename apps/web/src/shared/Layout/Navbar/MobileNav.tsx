@@ -35,7 +35,6 @@ export const MobileNav = () => {
   );
 };
 
-// todo: navigation: Link
 const MobileNavItem = ({ label, children, href }: INavItem) => {
   const { isOpen, onToggle } = useDisclosure();
 

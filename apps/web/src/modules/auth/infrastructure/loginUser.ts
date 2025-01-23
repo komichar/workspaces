@@ -6,7 +6,6 @@ import type {
 } from "../../../../../api/src/auth.routing";
 
 export interface ICredentials {
-  // TODO: cleanup this interface
   username: string;
   password: string;
 }
