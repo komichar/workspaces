@@ -169,7 +169,7 @@ const LogoutButton = () => {
           <MenuItem isDisabled onClick={() => navigate("/profile")}>
             Profile
           </MenuItem>
-          <MenuItem onClick={() => logout().then(() => navigate("/"))}>
+          <MenuItem onClick={() => logout().then(() => navigate("/sign-in"))}>
             Logout
           </MenuItem>
         </MenuList>

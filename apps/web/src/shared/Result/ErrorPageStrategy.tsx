@@ -27,7 +27,7 @@ export function ErrorPageStrategy<Response extends AjaxError["response"] = any>(
       case 500:
         return <InternalServerErrorResult />;
       case 401:
-        logout().then(() => navigate("/"));
+        logout().then(() => navigate("/sign-in"));
         return null;
       case 403:
       case 404:

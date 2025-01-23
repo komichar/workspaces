@@ -5,6 +5,12 @@ import {
   Box,
   Button,
   Heading,
+  HStack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
   UnorderedList,
   useClipboard,
@@ -21,6 +27,8 @@ import type { User } from "../../../../../api/src/user";
 import { useAuthStore } from "../application";
 import { useUsersQuery } from "../infrastructure";
 import { useSignInNotifications } from "./useSignInNotifications";
+import { useOfficesQuery } from "modules/offices/infrastructure";
+import { useOfficesUsersQuery } from "modules/offices-users/infrastructure/officesUsersQuery";
 
 interface IProps {
   initialUsername?: string;
@@ -35,6 +43,7 @@ export const SignInForm = ({
   const [password, setPassword] = useState(initialPassword);
 
   const users = useUsersQuery();
+  const offices = useOfficesQuery();
 
   const [notifySuccess, notifyFailure] = useSignInNotifications();
   const login = useAuthStore((store) => store.login);
@@ -96,26 +105,65 @@ export const SignInForm = ({
             Use existing users to sign in
           </Heading>
 
-          {users.data && (
-            <UnorderedList>
-              {users.data.map((user) => (
-                <ExistingUser
-                  key={user.id}
-                  user={user}
-                  onSignInClick={(email) =>
-                    login({ username: email, password })
-                      .then(() => notifySuccess())
-                      .catch(() => notifyFailure())
-                  }
-                ></ExistingUser>
-              ))}
-            </UnorderedList>
+          {offices.data && (
+            <Tabs>
+              <TabList>
+                {offices.data.offices.map((office) => (
+                  <Tab key={office.id}>{office.city}</Tab>
+                ))}
+              </TabList>
+
+              <TabPanels>
+                {offices.data.offices.map((office) => (
+                  <TabPanel key={office.id}>
+                    <OfficeUsersUnorderedList
+                      office_id={office.id}
+                      onSignInClick={(email) =>
+                        login({ username: email, password })
+                          .then(() => notifySuccess())
+                          .catch(() => notifyFailure())
+                      }
+                    ></OfficeUsersUnorderedList>
+                  </TabPanel>
+                ))}
+              </TabPanels>
+            </Tabs>
           )}
         </VStack>
       </VStack>
     </>
   );
 };
+
+type OfficeUsersProps = {
+  onSignInClick: (email: string) => void;
+  office_id: number;
+};
+
+function OfficeUsersUnorderedList({
+  office_id,
+  onSignInClick,
+}: OfficeUsersProps) {
+  const officesUsers = useOfficesUsersQuery(office_id);
+  if (!officesUsers.data) {
+    return null;
+  }
+
+  return (
+    <UnorderedList>
+      <Text color="gray.500">
+        {officesUsers.data.length} users work in this office
+      </Text>
+      {officesUsers.data.map((user) => (
+        <ExistingUser
+          key={user.id}
+          user={user}
+          onSignInClick={() => onSignInClick(user.email)}
+        ></ExistingUser>
+      ))}
+    </UnorderedList>
+  );
+}
 
 type Props = {
   user: User;
