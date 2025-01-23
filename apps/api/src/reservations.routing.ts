@@ -87,8 +87,7 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
       throw createHttpError.BadRequest("Seat number is invalid");
     }
 
-    // check if user has already booked a seat for the same date
-
+    // TODO: rework to find by time collision, not just an existing reservation
     const [existingReservation] = await db
       .select()
       .from(reservationsTable)
