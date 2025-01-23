@@ -72,3 +72,14 @@ Similar to recommendation in Part 2/3, here I also suggest opening a new **VS CO
 1. from web dir, run `cp .env.example .env`
 2. from web dir, make sure your **.env** file is targeting correct localhost of your api server
 3. from web dir, run `pnpm run dev` and it displays the link to open it in the browser
+
+### Building code
+
+1. for api - run `pnpm run build` from apps/api dir
+2. for web - run `pnpm run build` from apps/web dir  
+   It has a **dual typescript** config one for local development **tsconfig.json**, and build **tsconfig.build.json** other for building the code for deployment.
+
+   local dev config: tsconfig.json -> can reach & import API codebase
+   build config: tsconfig.build.json -> cannot reach API codebase
+
+   The difference between the two is the `include` key - the local development config can see the codebase from the API and import types using `import type` synthax for type safety in the clients side when calling http endpoints.
