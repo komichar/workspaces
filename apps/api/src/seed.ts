@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { db } from "./database.js";
 import { Office } from "./office.js";
 import { officesTable, usersTable } from "./schema.js";
-import { NewUser } from "./user.js";
+import { NewUser, User } from "./user.js";
 
 const BelgradeOfficeUsersCount = 10;
 const IrvineOfficeUsersCount = 20;
@@ -32,32 +32,57 @@ console.log(
   `Added offices: ${belgradeOffice.city}, ${irvineOffice.city}, ${parisOffice.city}`
 );
 
-const usersss: NewUser[] = [];
+const users: User[] = [];
 
 for (let i = 0; i < BelgradeOfficeUsersCount; i++) {
-  usersss.push(createOfficeUser(belgradeOffice.id, i == 0));
+  try {
+    const newBelgradeUser = createOfficeUserPayload(belgradeOffice.id, i == 0);
+
+    const [createdBelgradeUser] = await db
+      .insert(usersTable)
+      .values(newBelgradeUser)
+      .returning();
+    users.push(createdBelgradeUser);
+  } catch (error) {
+    console.error("unable to insert");
+  }
 }
 for (let i = 0; i < IrvineOfficeUsersCount; i++) {
-  usersss.push(createOfficeUser(irvineOffice.id, i == 0));
+  try {
+    const newIrvineUser = createOfficeUserPayload(irvineOffice.id, i == 0);
+    const [createdIrvineUser] = await db
+      .insert(usersTable)
+      .values(newIrvineUser)
+      .returning();
+    users.push(createdIrvineUser);
+  } catch (error) {
+    console.error("unable to insert");
+  }
 }
 for (let i = 0; i < ParisOfficeUsersCount; i++) {
-  usersss.push(createOfficeUser(parisOffice.id, i == 0));
+  try {
+    const newParisUser = createOfficeUserPayload(parisOffice.id, i == 0);
+    const [createdParisUser] = await db
+      .insert(usersTable)
+      .values(newParisUser)
+      .returning();
+    users.push(createdParisUser);
+  } catch (error) {
+    console.error("unable to insert");
+  }
 }
 
-function createOfficeUser(office_id: number, admin: boolean) {
-  const nu: NewUser = {
+function createOfficeUserPayload(office_id: number, admin: boolean) {
+  const newUserPayload: NewUser = {
     email: faker.internet.email(),
     admin: admin,
     name: faker.person.firstName(),
     office_id: office_id,
   };
-  return nu;
+  return newUserPayload;
 }
 
-const users = await db.insert(usersTable).values(usersss).returning();
-
 console.log(`Added users: ${users.length}`);
-// list admins
 const admins = users.filter((u) => u.admin);
 console.log(`Admins: are ${admins.length}`);
 admins.forEach((a) => console.log(a.email));
