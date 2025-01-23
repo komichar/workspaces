@@ -244,6 +244,91 @@ paths:
                     status: error
                     error:
                       message: Sample error message
+  /v1/offices/{id}/users:
+    get:
+      operationId: GetV1OfficesIdUsers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: GET /v1/offices/:id/users Parameter
+          schema:
+            type: number
+            format: double
+            exclusiveMinimum: 0
+            maximum: 1.7976931348623157e+308
+      responses:
+        "200":
+          description: GET /v1/offices/:id/users Positive response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: success
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              format: int64
+                              minimum: -9007199254740991
+                              maximum: 9007199254740991
+                            office_id:
+                              type: integer
+                              format: int64
+                              minimum: -9007199254740991
+                              maximum: 9007199254740991
+                            name:
+                              type: string
+                            admin:
+                              type: boolean
+                            email:
+                              type: string
+                          required:
+                            - id
+                            - office_id
+                            - name
+                            - admin
+                            - email
+                    required:
+                      - users
+                required:
+                  - status
+                  - data
+        "400":
+          description: GET /v1/offices/:id/users Negative response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    const: error
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                    required:
+                      - message
+                required:
+                  - status
+                  - error
+              examples:
+                example1:
+                  value:
+                    status: error
+                    error:
+                      message: Sample error message
   /v1/offices/{id}/days/{date}/availability:
     get:
       operationId: GetV1OfficesIdDaysDateAvailability
