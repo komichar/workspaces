@@ -82,7 +82,7 @@ function createOfficeUserPayload(office_id: number, admin: boolean) {
   return newUserPayload;
 }
 
-console.log(`Added users: ${users.length}`);
+console.log(`Added users total: ${users.length}`);
 const admins = users.filter((u) => u.admin);
-console.log(`Admins: are ${admins.length}`);
+console.log(`Admins:`);
 admins.forEach((a) => console.log(a.email));
