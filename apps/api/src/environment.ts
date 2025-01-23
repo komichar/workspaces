@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const environmentSchema = z.object({
   DB_FILE_NAME: z.string().trim().min(5),
+  LISTEN_PORT: z.coerce.number().min(1000).max(9000),
 });
 
 const environmentValidation = environmentSchema.safeParse(process.env);

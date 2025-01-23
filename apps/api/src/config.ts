@@ -1,7 +1,9 @@
+import "dotenv/config";
 import { createConfig } from "express-zod-api";
 import { readFile } from "fs/promises";
 import ui from "swagger-ui-express";
 import yaml from "yaml";
+import { environment } from "./environment.js";
 
 export const config = createConfig({
   beforeRouting: async ({ app }) => {
@@ -11,7 +13,7 @@ export const config = createConfig({
     app.use("/docs", ui.serve, ui.setup(documentation));
   },
   http: {
-    listen: 8090, // port, UNIX socket or options
+    listen: environment.LISTEN_PORT,
   },
   cors: ({ defaultHeaders, request, endpoint, logger }) => ({
     ...defaultHeaders,

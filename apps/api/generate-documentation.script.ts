@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { writeFile } from "node:fs/promises";
 import { config } from "./src/config.js";
 import { Documentation } from "express-zod-api";

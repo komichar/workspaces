@@ -1,28 +1,69 @@
-TODO
+# High level intro
 
-- [ ] implement API authorization on some endpoints
-- [ ] implement API typescript building, tsconfig, src
-- [ ] cleanup WEB UI
+This system for booking desks seats at offices consists of a REST API and a SPA client web app.
 
-FIRST TIME SETUP
+Project requirements details are not publicly available.
 
-- 1.  clone the repo
-- 2.  cd into dir
-- 3.  have globally installed pnpm@9 and pnpm install
-- 4.  run node version 20, nvm use - TODO: commit .nvmrc
-- 5.  copy .env.example into .env
-- 6.  run database push/migrate command
-- 7.  run locally
-- 8.  setting up debugger for VSCODE locally, copy launch.json.example into launch.json & hit F5
+## Tech stack overview
 
-NICE TO HAVE
+Both API and SPA are built using fresh tech from the TypeScript ecosystem;
 
-- [ ] state machines
-- [ ] optimistic concurrency to handle reservation collisions
-- [ ] presentation
-- [ ] excalidraw
-- [ ] system design high level
+- Latest node.js LTS 22
+- Drizzle ORM
+- pnpm 9
+- TypeScript 5
+- Vite
+- Zod
 
-NOTES
+### API tech stack overview
 
-- Fixing Broken Drizzle Foreign Key Migrations In SQLite - https://www.youtube.com/watch?v=qTp3VA-9DYc
+- This REST API is a TypeScript Node.JS application server
+- Built using https://www.npmjs.com/package/express-zod-api
+- Uses https://zod.dev/ for strong input/output validation
+- Nicely integrates with express-zod-api's **automatic swagger** generation, (usually a _true nightmare_ for manual maintenence)
+- Allows strongly typed + runtime validated responses.
+- The request/response types are `expored` from API and `imported` into the web SPA
+- Data layer with Drizzle ORM https://orm.drizzle.team/docs/overview & a local SQLite database
+- Local development serving & live reload with `tsx` https://github.com/privatenumber/tsx
+
+### SPA tech stack overview
+
+- Built using Vite https://vite.dev/ and Typescript 5
+- Renders using React 18, routed with react-router-dom 6
+- Uses https://www.chakra-ui.com/ to pretty good
+- Created from this starter https://github.com/bartstc/vite-ts-react-template
+- Uses TanStack Query for utilites for fetching,rendering, loading helpers https://tanstack.com/query/latest
+
+# First time setup and running locally
+
+## Part 1/3 - repo root setup
+
+1. clone this repo `git  clone git@github.com:komichar/workspaces.git`
+2. cd into the repo root `cd workspaces`
+3. run `node -v` and make sure you're running 22, or 20 should be fine.
+4. you can use [nvm](https://github.com/nvm-sh/nvm), it reads **.nvmrc** file at repo root and sets correct version. Run `nvm install` and `nvm use` at repo root.
+5. run `pnpm -v` and make sure you're running version 9, i used version `9.12.3`. have globally installed https://pnpm.io/installation#on-posix-systems
+6. run `pnpm install` from repo root
+
+## Part 2/3 - api setup & running locally
+
+You will need 2 terminal tabs for best workflow - one to run in dev mode, and another to serve the GUI of the database.
+
+For best VS CODE TypeScript intellisense & debugging, I suggest you **do not** work from the repo root, due to tsconfig coverage & integrated terminals opening at the right path.
+
+0. (TIP) I suggest you open the api dir in a **new VS CODE window** `code apps/api/` when working on api.
+1. (skip if you followed TIP) from repo root we need move into the **api** dir, run `cd apps/api/` and run following commands:
+2. from api dir, run `cp .env.example .env`
+3. from api dir, run `pnpm exec drizzle-kit migrate`
+4. from api dir, run `pnpm exec drizzle-kit studio` and it will serve you GUI to manage the database
+   ```
+   Drizzle Studio is up and running on https://local.drizzle.studio
+   ```
+5. from api dir, run `pnpm run dev`
+6.
+7. when you make significant changes to
+8. setting up debugger for VS CODE locally, copy launch.json.example into launch.json & hit F5
+
+## Part 3/3 - api setup & running locally
+
+Similar to recommendation in Part 2/3, here I also suggest opening a new **VS CODE** window `code apps/api/`
