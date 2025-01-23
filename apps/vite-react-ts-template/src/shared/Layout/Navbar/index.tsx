@@ -1,18 +1,30 @@
-import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
+  Badge,
   Box,
-  Flex,
-  Text,
-  IconButton,
   Button,
   Collapse,
+  Flex,
   HStack,
-  useColorModeValue,
+  IconButton,
+  Text,
   useBreakpointValue,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { Link, useNavigate } from "shared/Router";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import {
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Tooltip,
+} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+
+import { Link } from "shared/Router";
 import { useNotImplementedYetToast } from "shared/Toast";
 
 import { useAuthStore } from "modules/auth/application";
@@ -115,9 +127,9 @@ const SignUpButton = () => {
 const LogoutButton = () => {
   const navigate = useNavigate();
 
-  const { isAuthenticated, email } = useAuthStore((store) => ({
+  const { isAuthenticated, user } = useAuthStore((store) => ({
     isAuthenticated: store.isAuthenticated,
-    email: store.user?.email,
+    user: store.user,
   }));
   const logout = useAuthStore((store) => store.logout);
 
@@ -125,13 +137,45 @@ const LogoutButton = () => {
     return null;
   }
 
+  if (!user) {
+    return null;
+  }
+
   return (
-    <Button
-      fontWeight={400}
-      variant="link"
-      onClick={() => logout().then(() => navigate("/"))}
-    >
-      Logout ({email})
-    </Button>
+    <Box display="flex" alignItems="center" gap={3}>
+      <Tooltip label={`Logged in as ${user.email}`} fontSize="sm">
+        <Avatar name={user.email} size="sm" />
+      </Tooltip>
+      <Box>
+        <Text fontWeight="medium">{user.email}</Text>
+        <Box display="flex" gap={2} mt={1}>
+          <Badge colorScheme="purple">ID: {user.id}</Badge>
+          <Badge colorScheme={user.admin ? "green" : "blue"}>
+            {user.admin ? "Admin" : "Regular"}
+          </Badge>
+        </Box>
+      </Box>
+
+      <Menu>
+        <MenuButton
+          as={Button}
+          variant="ghost"
+          size="sm"
+          rightIcon={<ChevronDownIcon />}
+        >
+          My Account
+        </MenuButton>
+        <MenuList>
+          <MenuItem isDisabled onClick={() => navigate("/profile")}>
+            Profile
+          </MenuItem>
+          <MenuItem onClick={() => logout().then(() => navigate("/"))}>
+            Logout
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    </Box>
   );
 };
+
+export default LogoutButton;

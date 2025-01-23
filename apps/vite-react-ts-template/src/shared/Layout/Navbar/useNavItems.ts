@@ -18,8 +18,4 @@ export const NAV_ITEMS: Array<INavItem> = [
     label: "Reservations",
     href: "/reservations",
   },
-  {
-    label: "Cart",
-    href: "/cart/1",
-  },
 ];

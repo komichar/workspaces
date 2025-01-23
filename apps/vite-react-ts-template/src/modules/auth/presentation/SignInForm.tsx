@@ -13,6 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { useSecondaryTextColor } from "theme";
 
+import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
+import { IconButton, Tooltip } from "@chakra-ui/react";
+
 import { TextInput } from "shared/Form";
 
 import type { User } from "../../../../../api/src/user";
@@ -94,7 +97,10 @@ export const SignInForm = ({ initialUsername, initialPassword }: IProps) => {
           {users.data && (
             <UnorderedList>
               {users.data.map((user) => (
-                <ExistingUser key={user.id} user={user}></ExistingUser>
+                <AnotherExistingUser
+                  key={user.id}
+                  user={user}
+                ></AnotherExistingUser>
               ))}
             </UnorderedList>
           )}
@@ -130,3 +136,37 @@ function ExistingUser({ user }: Props) {
     </Box>
   );
 }
+
+function AnotherExistingUser({ user }: { user: User }) {
+  const { onCopy, hasCopied } = useClipboard(user.email);
+  const secondaryColor = useColorModeValue("gray.600", "gray.400");
+
+  return (
+    <Box display="flex" py={2} alignItems="center" gap={3}>
+      {/* Copy Email Button */}
+      <Tooltip label={hasCopied ? "Email copied!" : "Copy email"} fontSize="sm">
+        <IconButton
+          aria-label="Copy email"
+          icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+          onClick={onCopy}
+          size="sm"
+          variant="outline"
+        />
+      </Tooltip>
+
+      {/* Email Address */}
+      <Text fontWeight="medium" color={secondaryColor} flex="1">
+        {user.email}
+      </Text>
+
+      <Badge>Id: {user.id}</Badge>
+
+      {/* User Role */}
+      <Badge colorScheme={user.admin ? "green" : "blue"}>
+        {user.admin ? "Admin" : "Regular"}
+      </Badge>
+    </Box>
+  );
+}
+
+export default ExistingUser;
