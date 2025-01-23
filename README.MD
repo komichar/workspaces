@@ -55,15 +55,16 @@ For best VS CODE TypeScript intellisense & debugging, I suggest you **do not** w
 1. (skip if you followed TIP) from repo root we need move into the **api** dir, run `cd apps/api/` and run following commands:
 2. from api dir, run `cp .env.example .env`
 3. from api dir, run `pnpm exec drizzle-kit migrate`
-   // TODO: add step seed
-4. from api dir, run `pnpm exec drizzle-kit studio` and it will serve you GUI to manage the database
+4. from api dir, run `pnpm run seed` to get 3 offices and some users, as well as admins
+5. from api dir, run `pnpm exec drizzle-kit studio` and it will serve you GUI to manage the database
    ```
    Drizzle Studio is up and running on https://local.drizzle.studio
    ```
-5. from api dir, run `pnpm run dev`
-6. swagger runs on /docs,
-7. when you make significant changes to
-8. setting up debugger for VS CODE locally, copy launch.json.example into launch.json & hit F5
+   Visit https://local.drizzle.studio and see offices & users
+6. from api dir, run `pnpm run dev`
+7. swagger runs on /docs,
+8. when you make significant changes to
+9. setting up debugger for VS CODE locally, copy launch.json.example into launch.json & hit F5
 
 ## Part 3/3 - api setup & running locally
 
