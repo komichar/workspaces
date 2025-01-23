@@ -27,7 +27,6 @@ export const usersListEndpoint = defaultEndpointsFactory.build({
   }),
   output: usersListOutput,
   handler: async ({ input, options, logger }) => {
-    console.log("input", input);
     const users: User[] = await db
       .select()
       .from(usersTable)

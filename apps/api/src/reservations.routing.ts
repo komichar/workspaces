@@ -29,8 +29,6 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
   input: reservationsListInput,
   output: reservationsListOutput,
   handler: async ({ input, options, logger }) => {
-    console.log("input", input);
-
     const [office]: Office[] = await db
       .select()
       .from(officesTable)
@@ -109,7 +107,6 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
     // TODO: calculate high demand, throw 400 if peak limited & hours dont match
     // high demand if 75% of a day's time is already booked, capacity * 0.75 * 8h
     const capacityBefore = await calculateTimeCapacity(office, input.date);
-    console.log("time capacity before", capacityBefore);
 
     const newReservation: NewReservation = {
       user_id: options.user.id,
@@ -126,7 +123,6 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
       .returning();
 
     const capacityAfter = await calculateTimeCapacity(office, input.date);
-    console.log("time capacity after", capacityAfter);
 
     return { reservation: reservationSelectSchema.parse(createdReservation) };
   },
