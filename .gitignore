@@ -1,6 +1,7 @@
 node_modules
 
 launch.json
+settings.json
 
 .env
 
