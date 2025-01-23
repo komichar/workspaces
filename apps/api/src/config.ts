@@ -6,11 +6,15 @@ import yaml from "yaml";
 import { environment } from "./environment.js";
 
 export const config = createConfig({
-  beforeRouting: async ({ app }) => {
+  beforeRouting: async ({ app, getLogger }) => {
     const documentation = yaml.parse(
       await readFile("./generated-api-swagger-definition.yaml", "utf-8")
     );
     app.use("/docs", ui.serve, ui.setup(documentation));
+
+    getLogger().info(
+      `Swagger documentation is available at http://localhost:${environment.LISTEN_PORT}/docs`
+    );
   },
   http: {
     listen: environment.LISTEN_PORT,
