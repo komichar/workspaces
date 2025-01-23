@@ -1,6 +1,6 @@
 import { buildUrl, queryClient, useQuery } from "utils";
 import { APIResponseWrapper, httpServiceReservationSystem } from "utils/http";
-import {
+import type {
   GetOfficeDayAvailabilityInput,
   GetOfficeDayAvailabilityOutput,
 } from "../../../../../api/src/offices-days-availability.routing";

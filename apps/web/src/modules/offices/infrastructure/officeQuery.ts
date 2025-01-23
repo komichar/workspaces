@@ -2,7 +2,7 @@ import { UseQueryOptions } from "@tanstack/react-query";
 
 import { buildUrl, queryClient, useQuery } from "utils";
 
-import { httpServiceReservationSystem, APIResponseWrapper } from "utils/http";
+import { APIResponseWrapper, httpServiceReservationSystem } from "utils/http";
 import type { Office } from "../../../../../api/src/office";
 import type { OfficeByIdOutput } from "../../../../../api/src/offices.routing";
 
