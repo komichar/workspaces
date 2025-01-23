@@ -21,7 +21,7 @@ import { userByIdEndpoint, usersListEndpoint } from "./users.routing.js";
 import { officesUsersListEndpoint } from "./offices-users.routing.js";
 
 const helloWorldEndpoint = defaultEndpointsFactory.build({
-  method: "get", // (default) or array ["get", "post", ...]
+  method: "get",
   input: z.object({
     name: z.string().optional(),
   }),

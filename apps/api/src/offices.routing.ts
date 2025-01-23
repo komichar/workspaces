@@ -12,7 +12,7 @@ export const officeListOutput = z.object({
 export type OfficeListOutput = z.infer<typeof officeListOutput>;
 
 export const officesListEndpoint = defaultEndpointsFactory.build({
-  method: "get", // (default) or array ["get", "post", ...]
+  method: "get",
   input: z.object({
     name: z.string().optional(),
   }),
@@ -30,7 +30,7 @@ export const officeByIdOutput = z.object({
 export type OfficeByIdOutput = z.infer<typeof officeByIdOutput>;
 
 export const officeByIdEndpoint = defaultEndpointsFactory.build({
-  method: "get", // (default) or array ["get", "post", ...]
+  method: "get",
   input: z.object({
     id: z.coerce.number().positive(),
   }),
@@ -47,7 +47,7 @@ export const officeByIdEndpoint = defaultEndpointsFactory.build({
 });
 
 export const officeCreateEndpoint = adminEndpointFactory.build({
-  method: "post", // (default) or array ["get", "post", ...]
+  method: "post",
   input: z.object({
     city: z.string().min(3).max(255),
     capacity: z.number().min(1).max(1000),

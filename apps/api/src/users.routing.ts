@@ -10,7 +10,7 @@ export const usersListOutput = z.object({
 });
 export type UsersListOutput = z.infer<typeof usersListOutput>;
 export const usersListEndpoint = defaultEndpointsFactory.build({
-  method: "get", // (default) or array ["get", "post", ...]
+  method: "get",
   input: z.object({
     id: z.coerce.number().positive().optional(),
     name: z.string().optional(),
@@ -49,7 +49,7 @@ export const userByIdOutput = z.object({
 });
 export type UserByIdOutput = z.infer<typeof userByIdOutput>;
 export const userByIdEndpoint = defaultEndpointsFactory.build({
-  method: "get", // (default) or array ["get", "post", ...]
+  method: "get",
   input: z.object({
     id: z.coerce.number().positive(),
   }),

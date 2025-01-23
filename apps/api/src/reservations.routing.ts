@@ -25,7 +25,7 @@ const reservationsListInput = z.object({
 });
 export type ReservationsListInput = z.infer<typeof reservationsListInput>;
 export const reservationsListEndpoint = defaultEndpointsFactory.build({
-  method: "get", // (default) or array ["get", "post", ...]
+  method: "get",
   input: reservationsListInput,
   output: reservationsListOutput,
   handler: async ({ input, options, logger }) => {
@@ -64,7 +64,7 @@ export const createReservationInput = z.object({
 export type CreateReservationInput = z.infer<typeof createReservationInput>;
 
 export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
-  method: "post", // (default) or array ["get", "post", ...]
+  method: "post",
   input: createReservationInput,
   output: z.object({
     reservation: reservationSelectSchema,
@@ -128,7 +128,7 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
 });
 
 export const reservationByIdEndpoint = defaultEndpointsFactory.build({
-  method: "get", // (default) or array ["get", "post", ...]
+  method: "get",
   input: z.object({
     id: z.coerce.number().positive(),
   }),
@@ -151,7 +151,7 @@ export const reservationByIdEndpoint = defaultEndpointsFactory.build({
 });
 
 export const cancelReservationByIdEndpoint = defaultEndpointsFactory.build({
-  method: "delete", // (default) or array ["get", "post", ...]
+  method: "delete",
   input: z.object({
     id: z.coerce.number().positive(),
   }),

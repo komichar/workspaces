@@ -10,7 +10,7 @@ export const officesUsersListOutput = z.object({
 });
 export type OfficeUsersListOutput = z.infer<typeof officesUsersListOutput>;
 export const officesUsersListEndpoint = defaultEndpointsFactory.build({
-  method: "get", // (default) or array ["get", "post", ...]
+  method: "get",
   input: z.object({
     id: z.coerce.number().positive(),
   }),
