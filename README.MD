@@ -1,12 +1,12 @@
 # High level intro
 
-This system for booking desks seats at offices consists of a REST API and a SPA client web app.
+This system for reservation of office desks (seats) consists of a REST API and a SPA client web app.
 
 Project requirements details are not publicly available.
 
 ## Tech stack overview
 
-Both API and SPA are built using fresh tech from the TypeScript ecosystem;
+Both API and SPA are built using fresh tech from the TypeScript ecosystem:
 
 - Latest node.js LTS 22
 - Drizzle ORM
@@ -77,7 +77,7 @@ Similar to recommendation in Part 2/3, here I also suggest opening a new **VS CO
 
 1. for api - run `pnpm run build` from apps/api dir
 2. for web - run `pnpm run build` from apps/web dir  
-   It has a **dual typescript** config one for local development **tsconfig.json**, and build **tsconfig.build.json** other for building the code for deployment.
+   It has a **dual typescript** config. One for local development **tsconfig.json**, and build **tsconfig.build.json** other for building the code for deployment.
 
    local dev config: tsconfig.json -> can reach & import API codebase
    build config: tsconfig.build.json -> cannot reach API codebase
