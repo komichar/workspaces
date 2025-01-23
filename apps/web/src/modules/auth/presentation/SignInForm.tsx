@@ -4,8 +4,11 @@ import {
   Badge,
   Box,
   Button,
+  Grid,
+  GridItem,
   Heading,
   HStack,
+  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -50,87 +53,93 @@ export const SignInForm = ({
 
   return (
     <>
-      <VStack align="stretch" spacing={8} w="100%" maxW="lg">
-        <VStack textAlign="center">
-          <Heading fontSize={{ base: "2xl", md: "4xl" }}>
-            Sign in to your account
-          </Heading>
-        </VStack>
-        <Box
-          rounded="lg"
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow="lg"
-          p={{ base: 6, md: 8 }}
-        >
-          <VStack
-            as="form"
-            spacing={4}
-            onSubmit={(e) => {
-              e.preventDefault();
-
-              if (!username || !password) {
-                return;
-              }
-
-              login({ username, password })
-                .then(() => notifySuccess())
-                .catch(() => notifyFailure());
-            }}
-          >
-            <TextInput
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.currentTarget.value)}
-            >
-              Username
-            </TextInput>
-            <TextInput
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
-            >
-              Password (doesn't matter)
-            </TextInput>
-            <VStack w="100%" spacing={10}>
-              <Button type="submit" colorScheme="blue" w="100%">
-                Sign in
-              </Button>
+      <Grid templateColumns="repeat(2, 1fr)" gap="10">
+        <GridItem>
+          <Stack align="stretch" spacing={8} w="100%" minW="lg">
+            <VStack textAlign="center">
+              <Heading fontSize={{ base: "2xl", md: "4xl" }}>
+                Sign in manually
+              </Heading>
             </VStack>
-          </VStack>
-        </Box>
+            <Box
+              rounded="lg"
+              bg={useColorModeValue("white", "gray.700")}
+              boxShadow="lg"
+              p={{ base: 6, md: 8 }}
+            >
+              <VStack
+                as="form"
+                spacing={4}
+                onSubmit={(e) => {
+                  e.preventDefault();
 
-        <VStack textAlign="left">
-          <Heading fontSize={{ base: "2xl", md: "4xl" }}>
-            Use existing users to sign in
-          </Heading>
+                  if (!username || !password) {
+                    return;
+                  }
 
-          {offices.data && (
-            <Tabs variant="enclosed">
-              <TabList>
-                {offices.data.offices.map((office) => (
-                  <Tab key={office.id}>{office.city} office</Tab>
-                ))}
-              </TabList>
+                  login({ username, password })
+                    .then(() => notifySuccess())
+                    .catch(() => notifyFailure());
+                }}
+              >
+                <TextInput
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.currentTarget.value)}
+                >
+                  Username
+                </TextInput>
+                <TextInput
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.currentTarget.value)}
+                >
+                  Password (doesn't matter)
+                </TextInput>
+                <VStack w="100%" spacing={10}>
+                  <Button type="submit" colorScheme="blue" w="100%">
+                    Sign in
+                  </Button>
+                </VStack>
+              </VStack>
+            </Box>
+          </Stack>
+        </GridItem>
 
-              <TabPanels>
-                {offices.data.offices.map((office) => (
-                  <TabPanel key={office.id}>
-                    <OfficeUsersUnorderedList
-                      office_id={office.id}
-                      onSignInClick={(email) =>
-                        login({ username: email, password })
-                          .then(() => notifySuccess())
-                          .catch(() => notifyFailure())
-                      }
-                    ></OfficeUsersUnorderedList>
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </Tabs>
-          )}
-        </VStack>
-      </VStack>
+        <GridItem>
+          <Stack>
+            <Heading fontSize={{ base: "2xl", md: "4xl" }}>
+              Quick signin as a certain user
+            </Heading>
+
+            {offices.data && (
+              <Tabs variant="enclosed">
+                <TabList>
+                  {offices.data.offices.map((office) => (
+                    <Tab key={office.id}>{office.city} office</Tab>
+                  ))}
+                </TabList>
+
+                <TabPanels>
+                  {offices.data.offices.map((office) => (
+                    <TabPanel key={office.id}>
+                      <OfficeUsersUnorderedList
+                        office_id={office.id}
+                        onSignInClick={(email) =>
+                          login({ username: email, password })
+                            .then(() => notifySuccess())
+                            .catch(() => notifyFailure())
+                        }
+                      ></OfficeUsersUnorderedList>
+                    </TabPanel>
+                  ))}
+                </TabPanels>
+              </Tabs>
+            )}
+          </Stack>
+        </GridItem>
+      </Grid>
     </>
   );
 };
