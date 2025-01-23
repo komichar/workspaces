@@ -25,12 +25,13 @@ import { useReservationCreatedNotifications } from "modules/reservations/present
 import { useReservationDeletedNotifications } from "modules/reservations/presentation/useReservationDeletedNotifications";
 import type { Reservation } from "../../../../api/src/reservation";
 import { useAvailabilityQuery } from "modules/availability/infrastructure";
+import { SeatGrid } from "./SeatGrid";
 
 type AvailableReservation = Omit<Reservation, "user_id"> & {
   user_id: null;
 };
 
-type MixedReservation = Reservation | AvailableReservation;
+export type MixedReservation = Reservation | AvailableReservation;
 
 export const ReservationSeatsOverview = () => {
   const notImplemented = useNotImplementedYetToast();
@@ -136,6 +137,7 @@ export const ReservationSeatsOverview = () => {
           </Box>
           <Progress
             borderRadius={4}
+            my={2}
             size="lg"
             value={availability.data.capacity.filled_ratio * 100}
           />
@@ -220,6 +222,14 @@ export const ReservationSeatsOverview = () => {
           );
         })}
       </Grid>
+
+      <SeatGrid
+        mixedReservations={mixedReservations}
+        afterAction={async () => availability.refetch()}
+        reservationCreateMutation={reservationCreateMutation}
+        reservationDeleteMutation={reservationDeleteMutation}
+        user={user}
+      ></SeatGrid>
 
       <Box my={2}>
         <VStack spacing={4} align="stretch"></VStack>

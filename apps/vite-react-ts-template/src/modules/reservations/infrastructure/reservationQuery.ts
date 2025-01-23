@@ -49,6 +49,10 @@ export const getReservationCreateMutation = () => ({
   },
 });
 
+export type ReservationCreateMutation = ReturnType<
+  typeof useReservationCreateMutation
+>;
+
 export const useReservationCreateMutation = () => {
   const { mutationFn } = getReservationCreateMutation();
 
@@ -70,6 +74,10 @@ export const getReservationDeleteMutation = () => ({
     );
   },
 });
+
+export type ReservationDeleteMutation = ReturnType<
+  typeof useReservationDeleteMutation
+>;
 
 export const useReservationDeleteMutation = () => {
   return useMutation({
