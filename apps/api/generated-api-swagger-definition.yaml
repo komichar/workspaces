@@ -105,9 +105,7 @@ paths:
                           name:
                             type: string
                           admin:
-                            type:
-                              - boolean
-                              - "null"
+                            type: boolean
                           email:
                             type: string
                         required:
@@ -206,9 +204,7 @@ paths:
                           name:
                             type: string
                           admin:
-                            type:
-                              - boolean
-                              - "null"
+                            type: boolean
                           email:
                             type: string
                         required:
@@ -711,9 +707,7 @@ paths:
                           name:
                             type: string
                           admin:
-                            type:
-                              - boolean
-                              - "null"
+                            type: boolean
                           email:
                             type: string
                         required:
@@ -816,9 +810,7 @@ paths:
                             name:
                               type: string
                             admin:
-                              type:
-                                - boolean
-                                - "null"
+                              type: boolean
                             email:
                               type: string
                           required:

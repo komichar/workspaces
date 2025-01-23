@@ -57,6 +57,13 @@
       "when": 1737581123003,
       "tag": "0007_eager_scream",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1737633972854,
+      "tag": "0008_luxuriant_nightcrawler",
+      "breakpoints": true
     }
   ]
 }

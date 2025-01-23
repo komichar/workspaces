@@ -6,7 +6,7 @@ export const usersTable = sqliteTable("users", {
     .references(() => officesTable.id)
     .notNull(),
   name: text().notNull(),
-  admin: integer({ mode: "boolean" }).default(false),
+  admin: integer({ mode: "boolean" }).notNull(),
   email: text().notNull().unique(),
 });
 

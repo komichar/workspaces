@@ -47,6 +47,7 @@ export const authRegisterEndpoint = defaultEndpointsFactory.build({
   }),
   handler: async ({ input, options, logger }) => {
     const newUser: NewUser = {
+      admin: false,
       office_id: input.office_id,
       email: input.email,
       name: input.name,
