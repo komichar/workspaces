@@ -32,6 +32,7 @@ import { useUsersQuery } from "../infrastructure";
 import { useSignInNotifications } from "./useSignInNotifications";
 import { useOfficesQuery } from "modules/offices/infrastructure";
 import { useOfficesUsersQuery } from "modules/offices-users/infrastructure/officesUsersQuery";
+import { useParams, useSearchParams } from "react-router-dom";
 
 interface IProps {
   initialUsername?: string;
@@ -44,6 +45,7 @@ export const SignInForm = ({
 }: IProps) => {
   const [username, setUsername] = useState(initialUsername);
   const [password, setPassword] = useState(initialPassword);
+  const [useParams, setParams] = useSearchParams();
 
   const users = useUsersQuery();
   const offices = useOfficesQuery();
@@ -113,8 +115,17 @@ export const SignInForm = ({
               Quick signin as a certain user
             </Heading>
 
-            {offices.data && (
-              <Tabs variant="enclosed">
+            {offices.data && offices.data.offices.length && (
+              <Tabs
+                variant="enclosed"
+                defaultIndex={
+                  useParams.get("office_id")
+                    ? offices.data.offices.findIndex(
+                        (o) => o.id.toString() === useParams.get("office_id")
+                      )
+                    : 0
+                }
+              >
                 <TabList>
                   {offices.data.offices.map((office) => (
                     <Tab key={office.id}>
