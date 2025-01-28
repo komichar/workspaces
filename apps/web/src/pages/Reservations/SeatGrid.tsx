@@ -16,6 +16,8 @@ import {
   ReservationDeleteMutation,
 } from "modules/reservations/infrastructure/reservationQuery";
 
+import { parseISO, set } from "date-fns";
+
 type Props = {
   mixedReservations: MixedReservation[];
   user: User;
@@ -37,14 +39,27 @@ export const SeatGrid = ({
   const handleReservation = async (reservation: MixedReservation) => {
     setLoading(true);
     try {
+      const date = parseISO(reservation.date);
+      const startTime = set(date, {
+        hours: 9,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0,
+      });
+      const endTime = set(date, {
+        hours: 17,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0,
+      });
       await reservationCreateMutation.mutateAsync({
         email: user.email,
         input: {
           office_id: user.office_id,
           date: reservation.date,
-          end_time: "00:00:00",
+          end_time: endTime.toISOString(),
           seat_number: reservation.seat_number,
-          start_time: "00:00:00",
+          start_time: startTime.toISOString(),
         },
       });
       toast({ title: "Reservation successful!", status: "success" });

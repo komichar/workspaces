@@ -56,9 +56,9 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
 
 export const createReservationInput = z.object({
   office_id: z.number().positive(),
-  date: z.string().length(10),
-  start_time: z.string().length(8),
-  end_time: z.string().length(8),
+  date: z.string().length(10), // TODO: remove input, take it from start_time after  validating
+  start_time: z.string().datetime(),
+  end_time: z.string().datetime(),
   seat_number: z.number().positive(),
 });
 export type CreateReservationInput = z.infer<typeof createReservationInput>;
@@ -82,7 +82,7 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
     }
 
     if (input.seat_number > office.capacity!) {
-      throw createHttpError.BadRequest("Seat number is invalid");
+      throw createHttpError.BadRequest("Seat number is invalid"); // TODO: check if seats start from 0 or 1
     }
 
     // TODO: rework to find by time collision, not just an existing reservation
@@ -111,8 +111,8 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
       user_id: options.user.id,
       office_id: input.office_id,
       date: input.date,
-      end_time: "17:00:00",
-      start_time: "09:00:00",
+      end_time: input.end_time,
+      start_time: input.start_time,
       seat_number: input.seat_number,
     };
 
