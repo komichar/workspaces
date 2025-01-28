@@ -54,7 +54,8 @@ export async function calculateTimeCapacity(
     high_demand: highDemand,
     booked_hours: booked.totalBookedHours || 0,
     filled_ratio: ratio,
-    filled_percentage: (ratio * 100).toString().substring(0, 2) + "%",
+    filled_percentage:
+      ratio == 1 ? "100%" : (ratio * 100).toString().substring(0, 2) + "%",
   };
 
   return capacity;
