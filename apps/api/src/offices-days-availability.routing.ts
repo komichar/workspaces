@@ -15,10 +15,27 @@ const getOfficeDayAvailabilityInput = z.object({
 export type GetOfficeDayAvailabilityInput = z.infer<
   typeof getOfficeDayAvailabilityInput
 >;
+
+const timeslotSchema = z.object({
+  from: z.string().datetime(), // ISO 8601 format
+  to: z.string().datetime(), // ISO 8601 format
+  reservation: reservationSelectSchema.optional(), // Included if the timeslot is reserved
+});
+
+type Timeslot = z.infer<typeof timeslotSchema>;
+
+const seatSchema = z.object({
+  seat_number: z.number().positive(),
+  timeslots: timeslotSchema.array(), // Array of all timeslots for the seat
+});
+
+type Seat = z.infer<typeof seatSchema>;
+
 const getOfficeDayAvailabilityOutput = z.object({
   office: officeSelectSchema,
   capacity: capacitySchema,
   reservations: reservationSelectSchema.array(),
+  seats: seatSchema.array(),
 });
 export type GetOfficeDayAvailabilityOutput = z.infer<
   typeof getOfficeDayAvailabilityOutput
@@ -51,10 +68,46 @@ export const getOfficeDayAvailability = authorizedEndpointFactory.build({
         )
       );
 
+    const seats: Seat[] = [];
+
+    for (let index = 0; index < office.capacity; index++) {
+      const seatNumber = index + 1;
+      const seatReservations = reservations.filter(
+        (reservation) => reservation.seat_number === seatNumber
+      );
+
+      const timeslots: Timeslot[] = [];
+
+      const fullDay: Timeslot = {
+        from: new Date(`${input.date}T08:00:00Z`).toISOString(),
+        to: new Date(`${input.date}T16:00:00Z`).toISOString(),
+      };
+
+      // Split availability based on reservations
+      let lastEnd = fullDay.from;
+      for (const reservation of seatReservations) {
+        if (lastEnd < reservation.start_time) {
+          timeslots.push({ from: lastEnd, to: reservation.start_time });
+        }
+        timeslots.push({
+          from: reservation.start_time,
+          to: reservation.end_time,
+          reservation: reservation,
+        });
+        lastEnd = reservation.end_time;
+      }
+      if (lastEnd < fullDay.to) {
+        timeslots.push({ from: lastEnd, to: fullDay.to });
+      }
+
+      seats.push({ seat_number: seatNumber, timeslots });
+    }
+
     return getOfficeDayAvailabilityOutput.parse({
       office,
       capacity,
       reservations,
+      seats,
     });
   },
 });

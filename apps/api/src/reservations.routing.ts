@@ -60,7 +60,6 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
 
 export const createReservationInput = z.object({
   office_id: z.number().positive(),
-  date: z.string().length(10), // TODO: remove input, take it from start_time after  validating
   start_time: z.string().datetime(),
   end_time: z.string().datetime(),
   seat_number: z.number().positive(),
@@ -88,6 +87,8 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
       throw createHttpError.BadRequest("Seat number is invalid");
     }
 
+    const short_date = input.start_time.slice(0, 10);
+
     const [conflictingReservation] = await db
       .select()
       .from(reservationsTable)
@@ -100,7 +101,7 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
             or(
               and(
                 gte(reservationsTable.start_time, input.start_time),
-                lte(reservationsTable.start_time, input.end_time)
+                lte(reservationsTable.start_time, input.end_time) // TODO: handle minutes, rework GTE LTE to GTE LT ?
               ),
               and(
                 gte(reservationsTable.end_time, input.start_time),
@@ -116,7 +117,7 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
           and(
             eq(reservationsTable.user_id, options.user.id),
             eq(reservationsTable.office_id, input.office_id),
-            eq(reservationsTable.date, input.date)
+            eq(reservationsTable.date, short_date)
           )
         )
       )
@@ -129,12 +130,12 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
     }
 
     // TODO: calculate high demand, throw 400 to reject the full day reservation
-    const capacityBefore = await calculateTimeCapacity(office, input.date);
+    const capacityBefore = await calculateTimeCapacity(office, short_date);
 
     const newReservation: NewReservation = {
       user_id: options.user.id,
       office_id: input.office_id,
-      date: input.date,
+      date: short_date,
       end_time: input.end_time,
       start_time: input.start_time,
       seat_number: input.seat_number,
@@ -145,7 +146,7 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
       .values(newReservation)
       .returning();
 
-    const capacityAfter = await calculateTimeCapacity(office, input.date);
+    const capacityAfter = await calculateTimeCapacity(office, short_date);
 
     return { reservation: reservationSelectSchema.parse(createdReservation) };
   },

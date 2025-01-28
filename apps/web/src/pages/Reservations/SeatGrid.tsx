@@ -56,7 +56,6 @@ export const SeatGrid = ({
         email: user.email,
         input: {
           office_id: user.office_id,
-          date: reservation.date,
           end_time: endTime.toISOString(),
           seat_number: reservation.seat_number,
           start_time: startTime.toISOString(),
