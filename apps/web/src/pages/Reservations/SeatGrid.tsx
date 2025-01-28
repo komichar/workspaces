@@ -60,7 +60,7 @@ export const SeatGrid = ({
     setLoading(true);
     try {
       await reservationDeleteMutation.mutateAsync(reservation.id);
-      toast({ title: "Reservation canceled.", status: "success" });
+      toast({ title: "Reservation canceled.", status: "info" });
       await afterAction();
     } catch {
       toast({ title: "Failed to cancel reservation.", status: "error" });
