@@ -117,7 +117,10 @@ export const SignInForm = ({
               <Tabs variant="enclosed">
                 <TabList>
                   {offices.data.offices.map((office) => (
-                    <Tab key={office.id}>{office.city} office</Tab>
+                    <Tab key={office.id}>
+                      {office.city} office
+                      <Badge ml={2}>{office.capacity} seats</Badge>
+                    </Tab>
                   ))}
                 </TabList>
 
