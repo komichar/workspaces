@@ -6,6 +6,7 @@ import { db } from "./database.js";
 import { Office, officeSelectSchema } from "./office.js";
 import { Reservation, reservationSelectSchema } from "./reservation.js";
 import { officesTable, reservationsTable } from "./schema.js";
+import createHttpError from "http-errors";
 
 const getOfficeDayAvailabilityInput = z.object({
   id: z.coerce.number().positive(),
@@ -33,6 +34,10 @@ export const getOfficeDayAvailability = authorizedEndpointFactory.build({
       .from(officesTable)
       .where(eq(officesTable.id, input.id))
       .limit(1);
+
+    if (!office) {
+      throw createHttpError.NotFound("Office not found");
+    }
 
     const capacity = await calculateTimeCapacity(office, input.date);
 

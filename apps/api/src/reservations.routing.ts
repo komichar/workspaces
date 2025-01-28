@@ -35,6 +35,10 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
       .where(eq(officesTable.id, input.office_id))
       .limit(1);
 
+    if (!office) {
+      throw createHttpError.NotFound();
+    }
+
     const reservations: Reservation[] = await db
       .select()
       .from(reservationsTable)

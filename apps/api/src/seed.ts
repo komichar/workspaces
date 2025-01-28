@@ -8,7 +8,7 @@ const BelgradeOfficeUsersCount = 10;
 const IrvineOfficeUsersCount = 20;
 const ParisOfficeUsersCount = 10;
 
-const [belgradeOffice, irvineOffice, parisOffice]: Office[] = await db
+const [belgradeOffice, irvineOffice, parisOffice]: Office[] = (await db
   .insert(officesTable)
   .values([
     {
@@ -27,7 +27,8 @@ const [belgradeOffice, irvineOffice, parisOffice]: Office[] = await db
       is_peak_limited: true,
     },
   ])
-  .returning();
+  .returning()) as [Office, Office, Office];
+
 console.log(
   `Added offices: ${belgradeOffice.city}, ${irvineOffice.city}, ${parisOffice.city}`
 );
@@ -38,10 +39,11 @@ for (let i = 0; i < BelgradeOfficeUsersCount; i++) {
   try {
     const newBelgradeUser = createOfficeUserPayload(belgradeOffice.id, i == 0);
 
-    const [createdBelgradeUser] = await db
+    const [createdBelgradeUser] = (await db
       .insert(usersTable)
       .values(newBelgradeUser)
-      .returning();
+      .returning()) as [User];
+
     users.push(createdBelgradeUser);
   } catch (error) {
     console.error("unable to insert");
@@ -50,10 +52,10 @@ for (let i = 0; i < BelgradeOfficeUsersCount; i++) {
 for (let i = 0; i < IrvineOfficeUsersCount; i++) {
   try {
     const newIrvineUser = createOfficeUserPayload(irvineOffice.id, i == 0);
-    const [createdIrvineUser] = await db
+    const [createdIrvineUser] = (await db
       .insert(usersTable)
       .values(newIrvineUser)
-      .returning();
+      .returning()) as [User];
     users.push(createdIrvineUser);
   } catch (error) {
     console.error("unable to insert");
@@ -62,10 +64,10 @@ for (let i = 0; i < IrvineOfficeUsersCount; i++) {
 for (let i = 0; i < ParisOfficeUsersCount; i++) {
   try {
     const newParisUser = createOfficeUserPayload(parisOffice.id, i == 0);
-    const [createdParisUser] = await db
+    const [createdParisUser] = (await db
       .insert(usersTable)
       .values(newParisUser)
-      .returning();
+      .returning()) as [User];
     users.push(createdParisUser);
   } catch (error) {
     console.error("unable to insert");

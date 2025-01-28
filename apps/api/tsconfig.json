@@ -9,7 +9,8 @@
     "moduleDetection": "force",
     "isolatedModules": true,
     /* Strictness */
-    "strict": false,
+    "strict": true,
+    "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
     /* If transpiling with TypeScript: */
     "moduleResolution": "NodeNext",
