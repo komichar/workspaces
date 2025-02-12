@@ -134,7 +134,8 @@ export const ReservationSeatsOverview = () => {
       )}
 
       <SeatGrid
-        mixedReservations={mixedReservations}
+        seats={availability.data.seats}
+        date={params.date as string}
         afterAction={async () => availability.refetch()}
         reservationCreateMutation={reservationCreateMutation}
         reservationDeleteMutation={reservationDeleteMutation}

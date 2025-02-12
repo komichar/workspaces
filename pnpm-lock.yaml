@@ -117,6 +117,9 @@ importers:
       react-error-boundary:
         specifier: ^3.1.4
         version: 3.1.4(react@18.3.1)
+      react-range:
+        specifier: ^1.10.0
+        version: 1.10.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom:
         specifier: ^6.25.1
         version: 6.28.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4425,6 +4428,7 @@ packages:
 
   libsql@0.4.7:
     resolution: {integrity: sha512-T9eIRCs6b0J1SHKYIvD8+KCJMcWZ900iZyxdnSCdqxN12Z1ijzT+jY5nrk72Jw4B0HGzms2NgpryArlJqvc3Lw==}
+    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lines-and-columns@1.2.4:
@@ -5147,6 +5151,12 @@ packages:
 
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
+
+  react-range@1.10.0:
+    resolution: {integrity: sha512-kDo0LiBUHIQIP8menx0UoxTnHr7UXBYpIYl/DR9jCaO1o29VwvCLpkP/qOTNQz5hkJadPg1uEM07XJcJ1XGoKw==}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
 
   react-remove-scroll-bar@2.3.8:
     resolution: {integrity: sha512-9r+yi9+mgU33AKcj6IbT9oRCO78WriSj6t/cF8DWBZJ9aOGPOTEDvdUDz1FwKim7QXWwmHqtdHnRJfhAxEG46Q==}
@@ -11709,6 +11719,11 @@ snapshots:
   react-is@17.0.2: {}
 
   react-is@18.3.1: {}
+
+  react-range@1.10.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   react-remove-scroll-bar@2.3.8(@types/react@18.3.18)(react@18.3.1):
     dependencies:

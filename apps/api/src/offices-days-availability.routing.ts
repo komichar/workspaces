@@ -22,14 +22,14 @@ const timeslotSchema = z.object({
   reservation: reservationSelectSchema.optional(), // Included if the timeslot is reserved
 });
 
-type Timeslot = z.infer<typeof timeslotSchema>;
+export type Timeslot = z.infer<typeof timeslotSchema>;
 
 const seatSchema = z.object({
   seat_number: z.number().positive(),
   timeslots: timeslotSchema.array(), // Array of all timeslots for the seat
 });
 
-type Seat = z.infer<typeof seatSchema>;
+export type Seat = z.infer<typeof seatSchema>;
 
 const getOfficeDayAvailabilityOutput = z.object({
   office: officeSelectSchema,
