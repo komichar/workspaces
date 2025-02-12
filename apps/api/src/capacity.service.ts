@@ -43,6 +43,10 @@ export async function calculateTimeCapacity(
       )
     );
 
+  if (!booked) {
+    throw new Error("Failed to calculate booked hours");
+  }
+
   const ratio = booked.totalBookedHours / totalCapacityHours;
   if (office.is_peak_limited && ratio >= PEAK_DEMAND_THRESHOLD) {
     highDemand = true;
@@ -54,7 +58,8 @@ export async function calculateTimeCapacity(
     high_demand: highDemand,
     booked_hours: booked.totalBookedHours || 0,
     filled_ratio: ratio,
-    filled_percentage: (ratio * 100).toString().substring(0, 2) + "%",
+    filled_percentage:
+      ratio == 1 ? "100%" : (ratio * 100).toString().substring(0, 2) + "%",
   };
 
   return capacity;

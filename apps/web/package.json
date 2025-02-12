@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p ./tsconfig.build.json && vite build",
+    "build": "tsc -p ./tsconfig.build.json && ESLINT_USE_FLAT_CONFIG=false vite build",
     "test": "vitest",
     "test:ci": "vitest run --reporter verbose --reporter=junit --outputFile=./unit-report.xml",
     "preview": "vite preview",
@@ -30,6 +30,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-error-boundary": "^3.1.4",
+    "react-range": "^1.10.0",
     "react-router-dom": "^6.25.1",
     "zustand": "^4.5.4"
   },

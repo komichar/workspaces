@@ -464,10 +464,80 @@ paths:
                             - start_time
                             - end_time
                             - status
+                      seats:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            seat_number:
+                              type: number
+                              format: double
+                              exclusiveMinimum: 0
+                              maximum: 1.7976931348623157e+308
+                            timeslots:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  from:
+                                    type: string
+                                    format: date-time
+                                    pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$
+                                  to:
+                                    type: string
+                                    format: date-time
+                                    pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$
+                                  reservation:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: integer
+                                        format: int64
+                                        minimum: -9007199254740991
+                                        maximum: 9007199254740991
+                                      user_id:
+                                        type: integer
+                                        format: int64
+                                        minimum: -9007199254740991
+                                        maximum: 9007199254740991
+                                      office_id:
+                                        type: integer
+                                        format: int64
+                                        minimum: -9007199254740991
+                                        maximum: 9007199254740991
+                                      seat_number:
+                                        type: integer
+                                        format: int64
+                                        minimum: -9007199254740991
+                                        maximum: 9007199254740991
+                                      date:
+                                        type: string
+                                      start_time:
+                                        type: string
+                                      end_time:
+                                        type: string
+                                      status:
+                                        type: string
+                                    required:
+                                      - id
+                                      - user_id
+                                      - office_id
+                                      - seat_number
+                                      - date
+                                      - start_time
+                                      - end_time
+                                      - status
+                                required:
+                                  - from
+                                  - to
+                          required:
+                            - seat_number
+                            - timeslots
                     required:
                       - office
                       - capacity
                       - reservations
+                      - seats
                 required:
                   - status
                   - data
@@ -1253,18 +1323,14 @@ paths:
                   format: double
                   exclusiveMinimum: 0
                   maximum: 1.7976931348623157e+308
-                date:
-                  type: string
-                  minLength: 10
-                  maxLength: 10
                 start_time:
                   type: string
-                  minLength: 8
-                  maxLength: 8
+                  format: date-time
+                  pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$
                 end_time:
                   type: string
-                  minLength: 8
-                  maxLength: 8
+                  format: date-time
+                  pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$
                 seat_number:
                   type: number
                   format: double
@@ -1272,7 +1338,6 @@ paths:
                   maximum: 1.7976931348623157e+308
               required:
                 - office_id
-                - date
                 - start_time
                 - end_time
                 - seat_number

@@ -1,8 +1,9 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, gte, lte, or } from "drizzle-orm";
 import { defaultEndpointsFactory } from "express-zod-api";
 import createHttpError from "http-errors";
 import { z } from "zod";
 import { authorizedEndpointFactory } from "./auth.middleware.js";
+import { calculateTimeCapacity, capacitySchema } from "./capacity.service.js";
 import { db } from "./database.js";
 import { Office } from "./office.js";
 import {
@@ -11,7 +12,6 @@ import {
   reservationSelectSchema,
 } from "./reservation.js";
 import { officesTable, reservationsTable } from "./schema.js";
-import { calculateTimeCapacity, capacitySchema } from "./capacity.service.js";
 
 export const reservationsListOutput = z.object({
   reservations: reservationSelectSchema.array(),
@@ -35,6 +35,10 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
       .where(eq(officesTable.id, input.office_id))
       .limit(1);
 
+    if (!office) {
+      throw createHttpError.NotFound();
+    }
+
     const reservations: Reservation[] = await db
       .select()
       .from(reservationsTable)
@@ -56,9 +60,8 @@ export const reservationsListEndpoint = defaultEndpointsFactory.build({
 
 export const createReservationInput = z.object({
   office_id: z.number().positive(),
-  date: z.string().length(10),
-  start_time: z.string().length(8),
-  end_time: z.string().length(8),
+  start_time: z.string().datetime(),
+  end_time: z.string().datetime(),
   seat_number: z.number().positive(),
 });
 export type CreateReservationInput = z.infer<typeof createReservationInput>;
@@ -70,7 +73,6 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
     reservation: reservationSelectSchema,
   }),
   handler: async ({ input, options, logger }) => {
-    // find office, check seat number
     const [office]: Office[] = await db
       .select()
       .from(officesTable)
@@ -81,38 +83,61 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
       throw createHttpError.NotFound();
     }
 
-    if (input.seat_number > office.capacity!) {
+    if (input.seat_number > office.capacity) {
       throw createHttpError.BadRequest("Seat number is invalid");
     }
 
-    // TODO: rework to find by time collision, not just an existing reservation
-    const [existingReservation] = await db
+    const short_date = input.start_time.slice(0, 10);
+
+    const [conflictingReservation] = await db
       .select()
       .from(reservationsTable)
       .where(
-        and(
-          eq(reservationsTable.user_id, options.user.id),
-          eq(reservationsTable.office_id, input.office_id),
-          eq(reservationsTable.date, input.date)
+        or(
+          // Prevent overlapping reservations for the same seat
+          and(
+            eq(reservationsTable.office_id, input.office_id),
+            eq(reservationsTable.seat_number, input.seat_number),
+            or(
+              and(
+                gte(reservationsTable.start_time, input.start_time),
+                lte(reservationsTable.start_time, input.end_time) // TODO: handle minutes, rework GTE LTE to GTE LT ?
+              ),
+              and(
+                gte(reservationsTable.end_time, input.start_time),
+                lte(reservationsTable.end_time, input.end_time)
+              ),
+              and(
+                lte(reservationsTable.start_time, input.start_time),
+                gte(reservationsTable.end_time, input.end_time)
+              )
+            )
+          ),
+          // Prevent duplicate reservations by the same user on the same day
+          and(
+            eq(reservationsTable.user_id, options.user.id),
+            eq(reservationsTable.office_id, input.office_id),
+            eq(reservationsTable.date, short_date)
+          )
         )
       )
       .limit(1);
 
-    if (existingReservation) {
+    if (conflictingReservation) {
       throw createHttpError.BadRequest(
-        "User already has a reservation for this date"
+        "There is already a reservation that conflicts with the specified time range."
       );
     }
 
     // TODO: calculate high demand, throw 400 to reject the full day reservation
-    const capacityBefore = await calculateTimeCapacity(office, input.date);
+    const capacityBefore = await calculateTimeCapacity(office, short_date);
 
     const newReservation: NewReservation = {
       user_id: options.user.id,
       office_id: input.office_id,
-      date: input.date,
-      end_time: "17:00:00",
-      start_time: "09:00:00",
+      date: short_date,
+      end_time: input.end_time,
+      start_time: input.start_time,
       seat_number: input.seat_number,
     };
 
@@ -121,7 +146,7 @@ export const reservationsCreateEndpoint = authorizedEndpointFactory.build({
       .values(newReservation)
       .returning();
 
-    const capacityAfter = await calculateTimeCapacity(office, input.date);
+    const capacityAfter = await calculateTimeCapacity(office, short_date);
 
     return { reservation: reservationSelectSchema.parse(createdReservation) };
   },

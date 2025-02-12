@@ -22,7 +22,7 @@ import {
   MenuList,
   Tooltip,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 import { Link } from "shared/Router";
 import { useNotImplementedYetToast } from "shared/Toast";
@@ -169,7 +169,18 @@ const LogoutButton = () => {
           <MenuItem isDisabled onClick={() => navigate("/profile")}>
             Profile
           </MenuItem>
-          <MenuItem onClick={() => logout().then(() => navigate("/sign-in"))}>
+          <MenuItem
+            onClick={() =>
+              logout().then(() =>
+                navigate({
+                  pathname: "/sign-in",
+                  search: createSearchParams({
+                    office_id: `${user.office_id}`,
+                  }).toString(),
+                })
+              )
+            }
+          >
             Logout
           </MenuItem>
         </MenuList>
